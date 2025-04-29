@@ -138,7 +138,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, code style, and t
 - **Newsletter**: [Subscribe on Substack](https://moodhaven.substack.com)  
 - **Discussions**: [GitHub Discussions](https://github.com/kenlacroix/MoodHavenJournal/discussions)  
 - **Follow**: [LinkedIn (MoodHavenApp)](https://www.linkedin.com/company/moodhavenapp)
-- **Website**: [moodhaven.app] (https://journal.moodhaven.app)
+- **Website**: [moodhaven.app](https://journal.moodhaven.app)
+
 ---
 
 ## License
