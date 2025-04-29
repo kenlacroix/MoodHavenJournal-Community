@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore all projects
+        run: dotnet restore src/MoodBloom.sln
+
+      - name: Build solution
+        run: dotnet build src/MoodBloom.sln --configuration Release
+
+      - name: Run tests
+        run: dotnet test src/MoodBloom.sln --configuration Release --no-build
