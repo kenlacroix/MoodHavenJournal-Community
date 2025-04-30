@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" data-theme="moodhaven">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoodHaven Journal</title>
+  <meta name="description" content="MoodHaven Journal: A private, calm, and modern journaling app with AI-powered insights and seamless syncing.">
+  <!-- Open Graph & Twitter -->
+  <meta property="og:title" content="MoodHaven Journal">
+  <meta property="og:description" content="Write. Reflect. Thrive in a private, polished UI.">
+  <meta property="og:image" content="assets/og-cover.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@moodhavenapp">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#4A90E2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)">
+  <!-- Variable Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS + DaisyUI -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: '#4A90E2',
+            accent: '#50E3C2',
+          }
+        }
+      },
+      plugins: [require('daisyui')],
+      daisyui: {
+        themes: [
+          {
+            moodhaven: {
+              primary: '#4A90E2',
+              secondary: '#50E3C2',
+              neutral: '#f5f7fa',
+              'base-100': '#ffffff',
+              info: '#3abff8',
+              success: '#36d399',
+              warning: '#fbbd23',
+              error: '#f87272'
+            }
+          },
+          'dark'
+        ]
+      }
+    }
+  </script>
+  <!-- Preload Mockup Assets -->
+  <link rel="preload" href="assets/Journal.png" as="image">
+  <link rel="preload" href="assets/Insights.png" as="image">
+  <link rel="preload" href="assets/Preferences.png" as="image">
+</head>
+<body class="font-sans text-gray-800 bg-neutral">
+  <a href="#main" class="sr-only focus:not-sr-only">Skip to main content</a>
+  <header role="banner" class="sticky top-0 bg-base-100 shadow-md z-50">
+    <nav role="navigation" aria-label="Main navigation" class="container mx-auto flex items-center justify-between p-4">
+      <a href="#hero" class="text-xl font-semibold text-primary">MoodHaven</a>
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="https://github.com/kenlacroix/MoodHavenJournal-Community" target="_blank" class="hover:text-primary">GitHub</a>
+        <a href="https://moodhaven.substack.com" target="_blank" class="hover:text-primary">Substack</a>
+        <a href="https://linkedin.com/company/moodhavenapp" target="_blank" class="hover:text-primary">LinkedIn</a>
+        <a href="https://x.com/moodhavenapp" target="_blank" class="hover:text-primary">X</a>
+        <a href="https://bsky.app/profile/moodhavenapp.bsky.social" target="_blank" class="hover:text-primary">Bluesky</a>
+      </div>
+      <button id="navToggle" aria-label="Toggle Menu" class="md:hidden btn btn-ghost btn-sm">
+        ☰
+      </button>
+      <button id="themeToggle" aria-label="Toggle Dark Mode" class="btn btn-ghost btn-sm">
+        🌙
+      </button>
+    </nav>
+    <!-- Mobile Drawer -->
+    <div id="mobileNav" class="hidden bg-base-100">
+      <a href="https://github.com/kenlacroix/MoodHavenJournal-Community" target="_blank" class="block px-4 py-2 hover:bg-neutral">GitHub</a>
+      <a href="https://moodhaven.substack.com" target="_blank" class="block px-4 py-2 hover:bg-neutral">Substack</a>
+      <a href="https://linkedin.com/company/moodhavenapp" target="_blank" class="block px-4 py-2 hover:bg-neutral">LinkedIn</a>
+      <a href="https://x.com/moodhavenapp" target="_blank" class="block px-4 py-2 hover:bg-neutral">X</a>
+      <a href="https://bsky.app/profile/moodhavenapp.bsky.social" target="_blank" class="block px-4 py-2 hover:bg-neutral">Bluesky</a>
+    </div>
+  </header>
+  <main id="main" role="main" class="container mx-auto px-4 py-16 space-y-24">
+    <!-- Hero -->
+    <section id="hero" class="text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">Write. Reflect. Thrive.</h1>
+      <p class="text-lg md:text-xl text-gray-600 mb-8">A private, polished journaling app with AI-powered insights and seamless sync.</p>
+      <a href="https://github.com/kenlacroix/MoodHavenJournal-Community" target="_blank" class="btn btn-primary btn-lg transition-transform duration-200 hover:scale-105">Get the Community Build →</a>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="overflow-hidden">
+      <h2 class="text-3xl font-semibold text-center mb-12">Key Features</h2>
+      <div class="grid gap-8 md:grid-cols-3">
+        <div class="text-center p-6 bg-base-100 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-200 hover:scale-105" data-aos="fade-up">
+          <div class="text-4xl mb-4">🔒</div>
+          <h3 class="text-xl font-medium mb-2">Private by Design</h3>
+          <p class="text-gray-600">All your entries are encrypted locally. No telemetry by default.</p>
+        </div>
+        <div class="text-center p-6 bg-base-100 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-200 hover:scale-105" data-aos="fade-up" data-aos-delay="100">
+          <div class="text-4xl mb-4">🤖</div>
+          <h3 class="text-xl font-medium mb-2">AI-Powered Insights</h3>
+          <p class="text-gray-600">Track your mood and tags over time with smart visualizations.</p>
+        </div>
+        <div class="text-center p-6 bg-base-100 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-200 hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+          <div class="text-4xl mb-4">☁️</div>
+          <h3 class="text-xl font-medium mb-2">Cross-Platform Sync</h3>
+          <p class="text-gray-600">Optional cloud backup keeps your journal safe across devices.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mockup Carousel -->
+    <section id="mockups">
+      <h2 class="text-3xl font-semibold text-center mb-8">Mockup Tour</h2>
+      <div class="overflow-x-auto scroll-snap-x snap-mandatory flex space-x-4 pb-4">
+        <picture class="snap-start flex-shrink-0 w-full md:w-2/3 lg:w-1/3">
+          <source srcset="assets/Journal.avif" type="image/avif">
+          <source srcset="assets/Journal.webp" type="image/webp">
+          <img src="assets/Journal.png" alt="Mockup of Journal UI" loading="lazy" class="rounded-xl shadow-lg">
+          <p class="text-sm text-center mt-2 text-gray-500">Mockup — subject to change</p>
+        </picture>
+        <picture class="snap-start flex-shrink-0 w-full md:w-2/3 lg:w-1/3">
+          <source srcset="assets/Insights.avif" type="image/avif">
+          <source srcset="assets/Insights.webp" type="image/webp">
+          <img src="assets/Insights.png" alt="Mockup of Insights UI" loading="lazy" class="rounded-xl shadow-lg">
+          <p class="text-sm text-center mt-2 text-gray-500">Mockup — subject to change</p>
+        </picture>
+        <picture class="snap-start flex-shrink-0 w-full md:w-2/3 lg:w-1/3">
+          <source srcset="assets/Preferences.avif" type="image/avif">
+          <source srcset="assets/Preferences.webp" type="image/webp">
+          <img src="assets/Preferences.png" alt="Mockup of Preferences UI" loading="lazy" class="rounded-xl shadow-lg">
+          <p class="text-sm text-center mt-2 text-gray-500">Mockup — subject to change</p>
+        </picture>
+      </div>
+    </section>
+  </main>
+
+  <button id="backToTop" aria-label="Back to Top" class="fixed bottom-6 right-6 btn btn-circle btn-primary hidden">↑</button>
+
+  <footer role="contentinfo" class="bg-base-100 py-6">
+    <div class="container mx-auto text-center text-gray-600">
+      <p>&copy; 2025 MoodHaven Journal. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script>
+    // AOS init
+    AOS.init({ once: true, duration: 600 });
+    // Theme Toggle & Persistence
+    const btn = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark'); btn.textContent = '☀️';
+    }
+    btn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      const mode = html.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('theme', mode);
+      btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+    });
+    // Mobile Nav Toggle
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('mobileNav').classList.toggle('hidden');
+    });
+    // Back to Top & Scroll Progress
+    const back = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) back.classList.remove('hidden'); else back.classList.add('hidden');
+    });
+    back.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+  <!-- Analytics & Error Logging -->
+  <script async defer data-domain="moodhaven.app" src="https://plausible.io/js/plausible.js"></script>
+  <script>
+    // Sentry placeholder
+    // Sentry.init({ dsn: 'YOUR_SENTRY_DSN' });
+  </script>
+</body>
+</html>
