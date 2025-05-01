@@ -69,13 +69,6 @@
     #exitModal .modal button { position: absolute; top: .5rem; right: .5rem; background: none; border: none; font-size: 1.25rem; cursor: pointer; }
 
     /* Skeleton placeholder */
-#backToTop {
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    #backToTop.show {
-      opacity: 1;
-    }
     .animate-pulse { @apply animate-pulse; }
   </style>
 
@@ -177,23 +170,16 @@
     </section>
 
     <!-- Newsletter Section -->
-    
-<section id="newsletter" class="w-full bg-secondary text-white py-16" data-aos="fade-up">
-  <div class="container mx-auto text-center">
-    <h2 class="text-3xl font-semibold mb-4">Stay in the Loop</h2>
-    <p class="mb-6">Be the first to know when we graduate from alpha.</p>
-    <form action="https://moodhaven.substack.com/api/v1/free" method="post" target="_blank"
-          class="flex flex-col sm:flex-row justify-center items-center gap-2">
-      <input type="email" name="email" required placeholder="Enter your email"
-             class="px-4 py-2 rounded-full text-black w-72 focus:outline-none border border-white shadow" />
-      <button type="submit"
-              class="px-6 py-2 rounded-full bg-white text-secondary font-semibold shadow hover:scale-105 transition">
-        Subscribe →
-      </button>
-    </form>
-  </div>
-</section>
-
+    <section id="newsletter" class="w-full bg-secondary text-white py-16" data-aos="fade-up">
+      <div class="container mx-auto text-center">
+        <h2 class="text-3xl font-semibold mb-4">Stay in the Loop</h2>
+        <p class="mb-6">Be the first to know when we graduate from alpha.</p>
+        <a href="https://moodhaven.substack.com/subscribe"
+           class="mx-auto inline-block px-6 py-3 bg-white text-secondary rounded-full font-semibold shadow hover:scale-105 transition">
+          Subscribe on Substack →
+        </a>
+      </div>
+    </section>
 
     <!-- From the Journal Section -->
     <section id="blog" class="container mx-auto px-4 py-16">
@@ -211,27 +197,7 @@
     </section>
 
     <!-- FAQ Section -->
-    
-<section id="testimonials" class="container mx-auto px-4 py-16" data-aos="fade-up">
-  <h2 class="text-3xl font-semibold text-center mb-8">What People Are Saying</h2>
-  <div class="grid gap-8 md:grid-cols-3">
-    <div class="p-6 bg-white dark:bg-neutral-800 rounded-xl shadow-lg text-center animate-pulse">
-      <p class="italic text-neutral-600 dark:text-neutral-300">“An incredible journaling experience — I feel safer and more focused.”</p>
-      <p class="mt-4 font-semibold text-primary">— Beta Tester</p>
-    </div>
-    <div class="p-6 bg-white dark:bg-neutral-800 rounded-xl shadow-lg text-center animate-pulse">
-      <p class="italic text-neutral-600 dark:text-neutral-300">“MoodHaven respects my privacy while helping me grow.”</p>
-      <p class="mt-4 font-semibold text-primary">— Early Supporter</p>
-    </div>
-    <div class="p-6 bg-white dark:bg-neutral-800 rounded-xl shadow-lg text-center animate-pulse">
-      <p class="italic text-neutral-600 dark:text-neutral-300">“Clean UI. Calming flow. Everything I wanted in a journal app.”</p>
-      <p class="mt-4 font-semibold text-primary">— Anonymous</p>
-    </div>
-  </div>
-</section>
-
-
-<section id="faq" class="container mx-auto px-4 py-16 bg-white dark:bg-neutral-900 rounded-2xl shadow-lg" data-aos="fade-up">
+    <section id="faq" class="container mx-auto px-4 py-16 bg-white dark:bg-neutral-900 rounded-2xl shadow-lg" data-aos="fade-up">
       <h2 class="text-3xl font-semibold text-center mb-8">Frequently Asked Questions</h2>
       <div class="max-w-2xl mx-auto space-y-4">
         <div class="border rounded-lg overflow-hidden">
@@ -266,7 +232,7 @@
        class="fixed bottom-6 left-6 bg-primary text-white font-semibold text-sm px-4 py-2 rounded-full shadow hover:bg-secondary">
       Get Community Build →
     </a>
-    
+    <button id="backToTop" class="fixed bottom-6 right-6 hidden">↑</button>
   
 <section class="container mx-auto px-4 py-16" data-aos="fade-up">
   <div class="max-w-2xl mx-auto text-center">
@@ -279,9 +245,12 @@
     </p>
     <p class="font-medium">— Ken LaCroix, Founder</p>
   </div>
-    </section>
+</section>
 
-<footer class="bg-neutral-800 text-neutral-100 py-6 text-center">&copy; 2025 MoodHaven Journal</footer>
+</main>
+
+  <!-- Footer -->
+  <footer class="bg-neutral-800 text-neutral-100 py-6 text-center">&copy; 2025 MoodHaven Journal</footer>
 
   <!-- Core Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
@@ -314,7 +283,7 @@
 
     // Back-to-top button
     const b2t = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => b2t.classList.toggle('show', window.scrollY > 300));
+    window.addEventListener('scroll', () => b2t.classList.toggle('hidden', window.scrollY < 300));
     b2t.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // FAQ toggle
@@ -392,20 +361,5 @@
 
   <!-- GitHub Buttons Widget -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-<!-- Back to Top Button with Tooltip -->
-<div class="group fixed bottom-6 right-6 z-50">
-  <button id="backToTop"
-          class="p-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-xl shadow-xl hover:shadow-2xl transition-all animate-float"
-          aria-label="Back to top">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
-    </svg>
-  </button>
-  <span class="absolute bottom-14 right-1/2 translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-    Back to top
-  </span>
-</div>
-
 </body>
 </html>
