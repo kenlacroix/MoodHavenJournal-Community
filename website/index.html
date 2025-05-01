@@ -177,16 +177,23 @@
     </section>
 
     <!-- Newsletter Section -->
-    <section id="newsletter" class="w-full bg-secondary text-white py-16" data-aos="fade-up">
-      <div class="container mx-auto text-center">
-        <h2 class="text-3xl font-semibold mb-4">Stay in the Loop</h2>
-        <p class="mb-6">Be the first to know when we graduate from alpha.</p>
-        <a href="https://moodhaven.substack.com/subscribe"
-           class="mx-auto inline-block px-6 py-3 bg-white text-secondary rounded-full font-semibold shadow hover:scale-105 transition">
-          Subscribe on Substack →
-        </a>
-      </div>
-    </section>
+    
+<section id="newsletter" class="w-full bg-secondary text-white py-16" data-aos="fade-up">
+  <div class="container mx-auto text-center">
+    <h2 class="text-3xl font-semibold mb-4">Stay in the Loop</h2>
+    <p class="mb-6">Be the first to know when we graduate from alpha.</p>
+    <form action="https://moodhaven.substack.com/api/v1/free" method="post" target="_blank"
+          class="flex flex-col sm:flex-row justify-center items-center gap-2">
+      <input type="email" name="email" required placeholder="Enter your email"
+             class="px-4 py-2 rounded-full text-black w-72 focus:outline-none border border-white shadow" />
+      <button type="submit"
+              class="px-6 py-2 rounded-full bg-white text-secondary font-semibold shadow hover:scale-105 transition">
+        Subscribe →
+      </button>
+    </form>
+  </div>
+</section>
+
 
     <!-- From the Journal Section -->
     <section id="blog" class="container mx-auto px-4 py-16">
