@@ -5,6 +5,7 @@ import { useEffect, useState, KeyboardEvent, useRef } from "react";
 import dynamic from "next/dynamic";
 import AnimatedReveal from "./AnimatedReveal";
 import { Heart, Lock, Feather } from "lucide-react";
+import WaitlistModal from "./WaitlistModal";
 
 const HeroParticles = dynamic(() => import("./HeroParticles"), {
   ssr: false,
@@ -23,9 +24,9 @@ type Props = {
 
 export default function HomeClient({ posts }: Props) {
   const [isMobile, setIsMobile] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Detect mobile viewport
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 768px)");
     setIsMobile(mql.matches);
@@ -34,7 +35,6 @@ export default function HomeClient({ posts }: Props) {
     return () => mql.removeEventListener("change", handler);
   }, []);
 
-  // Keyboard navigation for mobile scroller
   const onCarouselKey = (e: KeyboardEvent) => {
     if (!carouselRef.current) return;
     if (e.key === "ArrowRight") {
@@ -46,6 +46,9 @@ export default function HomeClient({ posts }: Props) {
 
   return (
     <div className="w-full">
+      {/* Waitlist Modal Integration */}
+      <WaitlistModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       {/* Hero Section */}
       <section className="relative text-white py-16 md:py-28 overflow-hidden md:mask-fade-edges">
         <img
@@ -64,12 +67,12 @@ export default function HomeClient({ posts }: Props) {
             MoodHaven Journal gives you a warm, secure corner of the web — where your thoughts stay yours.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-6">
-            <a
-              href="#"
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="w-full sm:w-auto text-center rounded-full bg-white text-[#3A6EA5] px-6 py-4 text-sm font-semibold shadow transition-all duration-200 ease-out hover:bg-blue-100 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3A6EA5]/60"
             >
-              Join the Community
-            </a>
+              Join the Waitlist
+            </button>
             <a
               href="https://github.com/kenlacroix/MoodHavenJournal-Community"
               target="_blank"
@@ -84,24 +87,24 @@ export default function HomeClient({ posts }: Props) {
       {/* Value Props Section */}
       <section className="pt-14 pb-14 bg-[var(--background)] -mt-2">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
-          {["Privacy", "Calm Interface", "Community"].map((label, i) => (
+          {['Privacy', 'Calm Interface', 'Community'].map((label, i) => (
             <AnimatedReveal
               key={label}
               delay={i * 0.2}
               className="space-y-4 p-4 transition-transform duration-300 ease-in-out hover:scale-[1.015] hover:shadow-md hover:shadow-neutral-200/50 rounded-xl"
             >
               <div className="h-20 flex items-end justify-center">
-                {label === "Privacy" && <Lock className="w-16 h-16 text-[#3A6EA5]" />}
-                {label === "Calm Interface" && <Feather className="w-16 h-16 text-[#4A90E2]" />}
-                {label === "Community" && <Heart className="w-16 h-16 text-[#F28C38]" />}
+                {label === 'Privacy' && <Lock className="w-16 h-16 text-[#3A6EA5]" />}
+                {label === 'Calm Interface' && <Feather className="w-16 h-16 text-[#4A90E2]" />}
+                {label === 'Community' && <Heart className="w-16 h-16 text-[#F28C38]" />}
               </div>
               <h3 className="text-xl font-semibold text-neutral-800 tracking-tight">{label}</h3>
               <p className="text-sm text-neutral-600 leading-relaxed">
-                {label === "Privacy" &&
-                  "Your entries stay with you. Encrypted and local-first — no cloud, no leaks."}
-                {label === "Calm Interface" &&
-                  "A soothing, distraction-free design that helps you breathe and reflect."}
-                {label === "Community" && "Connect with others on a similar path."}
+                {label === 'Privacy' &&
+                  'Your entries stay with you. Encrypted and local-first — no cloud, no leaks.'}
+                {label === 'Calm Interface' &&
+                  'A soothing, distraction-free design that helps you breathe and reflect.'}
+                {label === 'Community' && 'Connect with others on a similar path.'}
               </p>
             </AnimatedReveal>
           ))}
@@ -133,9 +136,9 @@ export default function HomeClient({ posts }: Props) {
                       </a>
                       <p className="text-xs text-neutral-400 mt-1">
                         {new Date(post.date).toLocaleDateString(undefined, {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
                         })}
                       </p>
                       <p className="text-sm text-neutral-600 mt-2">{post.snippet}</p>
@@ -151,7 +154,7 @@ export default function HomeClient({ posts }: Props) {
                 tabIndex={0}
                 onKeyDown={onCarouselKey}
                 className="relative overflow-x-auto whitespace-nowrap snap-x snap-mandatory scrollbar-hide py-2 px-4 cursor-grab hover:cursor-grabbing"
-                style={{ WebkitOverflowScrolling: "touch" }}
+                style={{ WebkitOverflowScrolling: 'touch' }}
               >
                 {posts.map((post, idx) => (
                   <div
@@ -168,9 +171,9 @@ export default function HomeClient({ posts }: Props) {
                     </a>
                     <p className="text-xs text-neutral-400 mt-1">
                       {new Date(post.date).toLocaleDateString(undefined, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
                       })}
                     </p>
                     <p className="text-sm text-neutral-600 mt-2">{post.snippet}</p>
