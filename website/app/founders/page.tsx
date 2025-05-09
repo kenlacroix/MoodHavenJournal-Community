@@ -1,135 +1,158 @@
 // app/founders/page.tsx
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { Lock, Pencil, Users, Leaf } from 'lucide-react';
+import { motion } from 'framer-motion';
+import WaitlistModal from '../../components/WaitlistModal';
+
+interface Milestone {
+  date: string;
+  title: string;
+  description: string;
+  projected?: boolean;
+}
+
+const milestones: Milestone[] = [
+  { date: 'Mar 2025', title: 'Idea Born', description: 'Ken conceives MoodHaven after searching for a safe journaling space.' },
+  { date: 'Aug 2025', title: 'Alpha Launch', description: 'Released first alpha to a small community for feedback.', projected: true },
+  { date: 'Sep 2025', title: 'Community Growth', description: 'Grew to 100+ alpha users sharing insights and suggestions.', projected: true },
+  { date: 'Oct 2025', title: 'Feature Refinement', description: 'Implemented privacy-first encryption and custom prompts.', projected: true },
+  { date: 'Nov 2026', title: 'Public Beta', description: 'Preparing for a wider beta—invite your friends and colleagues!', projected: true },
+];
 
 export default function FoundersPage() {
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const entryRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const [visible, setVisible] = useState<boolean[]>(Array(milestones.length).fill(false));
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      if (overlayRef.current) {
-        overlayRef.current.style.transform = `translateY(${window.scrollY * 0.2}px)`;
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const idx = Number(e.target.getAttribute('data-idx'));
+            setVisible(v => { const copy = [...v]; copy[idx] = true; return copy; });
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    entryRefs.current.forEach(ref => ref && observer.observe(ref));
+    return () => observer.disconnect();
   }, []);
+
+  const completed = milestones.filter(m => !m.projected);
+  const projected = milestones.filter(m => m.projected);
+  const percentComplete = Math.round((completed.length / milestones.length) * 100);
 
   return (
     <>
-      <Head>
-        <title>Meet the Founder – MoodHaven Journal</title>
-        {/* …meta tags… */}
-      </Head>
+      <Head><title>Meet the Founder – MoodHaven Journal</title></Head>
+      <WaitlistModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <main className="bg-[var(--background)] text-[var(--foreground)] font-sans antialiased px-4 pt-6 pb-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-      <main className="bg-[var(--background)] text-[var(--foreground)] font-sans antialiased">
-        {/* Hero */}
-        <header className="relative bg-gradient-to-b from-blue-50 to-white overflow-hidden" aria-labelledby="founder-heading">
-          <div
-            ref={overlayRef}
-            className="absolute inset-0 bg-[url('/patterns/raindrops.svg')] bg-fixed opacity-20 pointer-events-none"
-            aria-hidden="true"
-          />
-          <div className="max-w-3xl mx-auto px-4 pt-16 pb-24 flex flex-col items-center space-y-6">
-            {/* Portrait */}
-            <div className="animate-fadeUp delay-200">
-              <div className="w-40 h-40 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white shadow-neu">
-                <Image
-                  src="/founder-headshot.png"
-                  alt="Portrait of Ken LaCroix"
-                  width={160}
-                  height={160}
-                  placeholder="blur"
-                  blurDataURL="/images/founder-headshot-blur.png"
-                  priority
-                />
+          {/* Sidebar: Bio + CTA */}
+          <aside className="col-span-1">
+            <div className="sticky top-4 space-y-4 max-h-[calc(100vh-4rem)] overflow-auto">
+              <div className="portrait-glow relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-neu mx-auto">
+                {/* Radial glow behind headshot */}
+                <Image src="/founder-headshot.png" alt="Portrait of Ken LaCroix" width={128} height={128} priority />
+              </div>
+              <div className="bg-gradient-to-b from-orange-50 to-orange-100 ring-1 ring-orange-100 rounded-2xl p-4 flex flex-col space-y-3">
+                <h2 className="text-lg font-bold text-center text-blue-700">Ken LaCroix</h2>
+                <p className="text-sm leading-loose">
+                  I started this project because I couldn’t find a journaling space that felt safe, calm, and respectful of personal growth. Most platforms either felt too clinical, too public, or too commercial.
+                </p>
+                <p className="text-sm leading-loose">
+                  MoodHaven is my response: a labor of love rooted in one belief — <strong>your thoughts should stay yours</strong>. No ads. No tracking. No pressure. Just a space to write, reflect, and grow.
+                </p>
+                <p className="text-sm leading-loose">
+                  This project is still early — we’re in an alpha community phase, and we’re building it together. If you believe in mindful design, privacy, and personal growth, I’d love for you to join the journey.
+                </p>
+                <button onClick={() => setIsModalOpen(true)} className="mt-2 bg-orange-500 text-white font-medium text-center px-4 py-2 rounded-full shadow hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-300">
+                  Join the Waitlist
+                </button>
+                <a href="https://github.com/kenlacroix/MoodHavenJournal-Community" target="_blank" className="mt-2 border border-orange-500 text-orange-500 text-center px-4 py-2 rounded-full shadow hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-300">
+                  Contribute on GitHub
+                </a>
               </div>
             </div>
-            {/* Title */}
-            <h1 id="founder-heading" className="animate-fadeUp delay-300 text-5xl sm:text-4xl font-black tracking-tight text-blue-700 text-center">
-              Meet the Founder
-            </h1>
-            {/* Intro */}
-            <p className="animate-fadeUp delay-400 text-lg leading-relaxed tracking-tight text-center max-w-prose">
-              Hi, I’m Ken LaCroix — creator of MoodHaven Journal.
-            </p>
-            {/* Divider */}
-            <div className="animate-fadeUp delay-500 w-12 h-0.5 bg-blue-300 rounded-full mt-4 mb-8" aria-hidden="true" />
-          </div>
-        </header>
+          </aside>
 
-        {/* Why It Matters Icons */}
-        <section className="bg-gray-50">
-          <div className="max-w-3xl mx-auto px-4 py-12 animate-fadeUp delay-600">
-            <h2 id="values-heading" className="sr-only">Why It Matters</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
-              <div>
-                <Lock className="mx-auto h-8 w-8 text-blue-600" />
-                <p className="mt-2 text-sm font-medium">Privacy</p>
+          {/* Timeline Section */}
+          <section className="col-span-1 lg:col-span-2">
+            <div className="grain bg-[url('/patterns/paper-grain.svg')] bg-cover p-4 lg:p-8 rounded-2xl">
+              <h2 className="text-center text-blue-700 text-xl lg:text-2xl font-semibold mb-4">Project Journey Timeline</h2>
+
+              {/* Progress Bar & FAQ link */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex-1 bg-blue-100 rounded-full h-2 mr-4">
+                  <div className="bg-blue-500 h-2 rounded-full transition-[width] duration-1000 ease-out" style={{ width: `${percentComplete}%` }} />
+                </div>
+                <span className="text-xs text-gray-500 mr-4">{percentComplete}% complete</span>
+                <a href="/faq" className="text-sm text-blue-600 hover:underline">Read the FAQ</a>
               </div>
-              <div>
-                <Pencil className="mx-auto h-8 w-8 text-blue-600" />
-                <p className="mt-2 text-sm font-medium">Mindful Design</p>
-              </div>
-              <div>
-                <Users className="mx-auto h-8 w-8 text-blue-600" />
-                <p className="mt-2 text-sm font-medium">Community</p>
-              </div>
-              <div>
-                <Leaf className="mx-auto h-8 w-8 text-blue-600" />
-                <p className="mt-2 text-sm font-medium">Growth</p>
-              </div>
+
+              <h3 className="text-lg font-medium text-gray-700 mb-2">Milestones</h3>
+              <ol role="list" className="space-y-4 lg:space-y-6 mb-4 lg:mb-6">
+                {completed.map((m, idx) => (
+                  <motion.li key={idx} data-idx={idx} ref={el => (entryRefs.current[idx] = el)} initial={{ opacity: 0, x: 50 }} animate={visible[idx] ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6, ease: 'easeOut' }} className="group flex items-start space-x-3 sm:space-x-4 lg:space-x-6">
+                    <div className="flex flex-col items-center mr-3">
+                      <span className="w-3 h-3 bg-blue-500 rounded-full ring-2 ring-white transition-colors group-hover:bg-orange-500" />
+                      <span className="w-0.5 flex-1 bg-blue-200" />
+                    </div>
+                    <div>
+                      <h4 className="text-blue-700 font-semibold group-hover:text-orange-600 transition-colors text-sm lg:text-base">{m.title}</h4>
+                      <p className="text-xs text-gray-500 group-hover:text-gray-700">{m.date}</p>
+                      <p className="mt-1 text-sm leading-loose hidden lg:block">{m.description}</p>
+                    </div>
+                  </motion.li>
+                ))}
+              </ol>
+
+              <hr className="border-t border-gray-200 my-4" />
+              <h3 className="text-lg font-medium text-gray-700 mb-2">Roadmap</h3>
+              <ol role="list" className="space-y-4 lg:space-y-6">
+                {projected.map((m, idx) => (
+                  <li key={idx} className="group flex items-start space-x-3 sm:space-x-4 lg:space-x-6 opacity-60">
+                    <div className="flex flex-col items-center mr-3">
+                      <span className="w-3 h-3 bg-transparent ring-2 ring-blue-500 rounded-full transition-colors group-hover:bg-orange-500" />
+                      {idx < projected.length - 1 && <span className="w-0.5 flex-1 bg-blue-200" />}
+                    </div>
+                    <div>
+                      <h4 className="text-blue-700 font-semibold group-hover:text-orange-600 transition-colors text-sm lg:text-base">{m.title}<span className="ml-2 text-xs bg-gray-200 text-gray-600 px-1 rounded">Projected</span></h4>
+                      <p className="text-xs text-gray-500 group-hover:text-gray-700">{m.date}</p>
+                      <p className="mt-1 text-sm leading-loose hidden lg:block">{m.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
-          </div>
-        </section>
-
-        {/* Founder Story */}
-        <section
-          className="max-w-3xl mx-auto px-4 mt-12 animate-fadeUp delay-700"
-          aria-labelledby="bio-heading"
-        >
-          <div className="bg-gradient-to-b from-orange-50 to-orange-100 ring-1 ring-orange-100 rounded-2xl shadow-neu p-8">
-            <h2 id="bio-heading" className="sr-only">Founder Bio</h2>
-            <div className="space-y-6 max-w-prose mx-auto">
-              <p>
-                I started this project because I couldn’t find a journaling space
-                that felt safe, calm, and respectful of personal growth. Most
-                platforms either felt too clinical, too public, or too commercial.
-              </p>
-              <p>
-                MoodHaven is my response: a labor of love rooted in one belief —
-                <strong> your thoughts should stay yours</strong>. No ads. No
-                tracking. No pressure. Just a space to write, reflect, and grow.
-              </p>
-              <p>
-                This project is still early — we’re in an alpha community phase,
-                and we’re building it together. If you believe in mindful design,
-                privacy, and personal growth, I’d love for you to join the
-                journey.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Contribute Button */}
-        <nav
-          className="max-w-3xl mx-auto px-4 mt-6 mb-0 flex justify-center animate-fadeUp delay-800"
-          aria-label="Primary action"
-        >
-          <a
-            href="https://github.com/kenlacroix/MoodHavenJournal-Community"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-blue-600 text-white font-medium px-6 py-3 rounded-full transition-transform duration-200 transform hover:scale-105 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          >
-            Contribute on GitHub
-          </a>
-        </nav>
-      </main>
+          </section>
+        </div>
+              </main>
+      {/* Glow animation CSS */}
+      <style jsx global>{`
+        @keyframes portraitGlow {
+          0% { opacity: 0.2; transform: scale(1); }
+          100% { opacity: 0.6; transform: scale(1.1); }
+        }
+        .portrait-glow::before {
+          content: '';
+          position: absolute;
+          top: 50%; left: 50%;
+          width: 150%; height: 150%;
+          transform: translate(-50%, -50%) scale(1);
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(242,140,56,0.4) 0%, transparent 60%);
+          animation: portraitGlow 2s ease-in-out infinite alternate;
+          pointer-events: none;
+        }
+      `}</style>
     </>
   );
 }
