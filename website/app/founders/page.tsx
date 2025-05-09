@@ -23,7 +23,7 @@ const milestones: Milestone[] = [
 ];
 
 export default function FoundersPage() {
-  const entryRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const entryRefs = useRef<Array<HTMLLIElement | null>>(Array(milestones.length).fill(null));
   const [visible, setVisible] = useState<boolean[]>(Array(milestones.length).fill(false));
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,7 +33,9 @@ export default function FoundersPage() {
         entries.forEach(e => {
           if (e.isIntersecting) {
             const idx = Number(e.target.getAttribute('data-idx'));
-            setVisible(v => { const copy = [...v]; copy[idx] = true; return copy; });
+            setVisible(v => {
+              const copy = [...v]; copy[idx] = true; return copy;
+            });
             observer.unobserve(e.target);
           }
         });
@@ -59,7 +61,6 @@ export default function FoundersPage() {
           <aside className="col-span-1">
             <div className="sticky top-4 space-y-4 max-h-[calc(100vh-4rem)] overflow-auto">
               <div className="portrait-glow relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-neu mx-auto">
-                {/* Radial glow behind headshot */}
                 <Image src="/founder-headshot.png" alt="Portrait of Ken LaCroix" width={128} height={128} priority />
               </div>
               <div className="bg-gradient-to-b from-orange-50 to-orange-100 ring-1 ring-orange-100 rounded-2xl p-4 flex flex-col space-y-3">
@@ -100,7 +101,15 @@ export default function FoundersPage() {
               <h3 className="text-lg font-medium text-gray-700 mb-2">Milestones</h3>
               <ol role="list" className="space-y-4 lg:space-y-6 mb-4 lg:mb-6">
                 {completed.map((m, idx) => (
-                  <motion.li key={idx} data-idx={idx} ref={el => (entryRefs.current[idx] = el)} initial={{ opacity: 0, x: 50 }} animate={visible[idx] ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6, ease: 'easeOut' }} className="group flex items-start space-x-3 sm:space-x-4 lg:space-x-6">
+                  <motion.li
+                    key={idx}
+                    data-idx={idx}
+                    ref={el => { entryRefs.current[idx] = el; }}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={visible[idx] ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className="group flex items-start space-x-3 sm:space-x-4 lg:space-x-6"
+                  >
                     <div className="flex flex-col items-center mr-3">
                       <span className="w-3 h-3 bg-blue-500 rounded-full ring-2 ring-white transition-colors group-hover:bg-orange-500" />
                       <span className="w-0.5 flex-1 bg-blue-200" />
@@ -113,7 +122,6 @@ export default function FoundersPage() {
                   </motion.li>
                 ))}
               </ol>
-
               <hr className="border-t border-gray-200 my-4" />
               <h3 className="text-lg font-medium text-gray-700 mb-2">Roadmap</h3>
               <ol role="list" className="space-y-4 lg:space-y-6">
@@ -124,7 +132,9 @@ export default function FoundersPage() {
                       {idx < projected.length - 1 && <span className="w-0.5 flex-1 bg-blue-200" />}
                     </div>
                     <div>
-                      <h4 className="text-blue-700 font-semibold group-hover:text-orange-600 transition-colors text-sm lg:text-base">{m.title}<span className="ml-2 text-xs bg-gray-200 text-gray-600 px-1 rounded">Projected</span></h4>
+                      <h4 className="text-blue-700 font-semibold group-hover:text-orange-600 transition-colors text-sm lg:text-base">
+                        {m.title}<span className="ml-2 text-xs bg-gray-200 text-gray-600 px-1 rounded">Projected</span>
+                      </h4>
                       <p className="text-xs text-gray-500 group-hover:text-gray-700">{m.date}</p>
                       <p className="mt-1 text-sm leading-loose hidden lg:block">{m.description}</p>
                     </div>
@@ -134,23 +144,23 @@ export default function FoundersPage() {
             </div>
           </section>
         </div>
-              </main>
+      </main>
       {/* Glow animation CSS */}
       <style jsx global>{`
         @keyframes portraitGlow {
-          0% { opacity: 0.2; transform: scale(1); }
+          0%   { opacity: 0.2; transform: scale(1); }
           100% { opacity: 0.6; transform: scale(1.1); }
         }
         .portrait-glow::before {
           content: '';
           position: absolute;
-          top: 50%; left: 50%;
-          width: 150%; height: 150%;
-          transform: translate(-50%, -50%) scale(1);
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(242,140,56,0.4) 0%, transparent 60%);
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border-radius: 9999px;
+          background: radial-gradient(circle, #F28C38 0%, transparent 70%);
           animation: portraitGlow 2s ease-in-out infinite alternate;
-          pointer-events: none;
         }
       `}</style>
     </>
