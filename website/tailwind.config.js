@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin');
+const typography = require('@tailwindcss/typography');
 
 module.exports = {
   content: [
@@ -44,6 +45,7 @@ module.exports = {
     },
   },
   plugins: [
+    // Custom animation delay plugin
     plugin(function ({ addUtilities, theme }) {
       const delays = theme('animationDelay');
       const utilities = {};
@@ -54,7 +56,8 @@ module.exports = {
       }
       addUtilities(utilities, ['responsive']);
     }),
-    // Existing plugin for mask-image
+
+    // Custom mask-image utility plugin
     function ({ matchUtilities, theme }) {
       matchUtilities(
         {
@@ -66,5 +69,8 @@ module.exports = {
         { values: theme('maskImage') }
       );
     },
+
+    // ✅ Tailwind Typography plugin
+    typography,
   ],
 };
