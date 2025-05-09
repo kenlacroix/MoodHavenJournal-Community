@@ -8,9 +8,8 @@ export async function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
-export default async function BlogPostPage({ params }) {
-  // `params` is a thenable in Next.js App Router — await to unwrap
-  const { slug } = await params;
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
 
   const post = getPostBySlug(slug);
   if (new Date(post.publishDate) > new Date()) return notFound();
