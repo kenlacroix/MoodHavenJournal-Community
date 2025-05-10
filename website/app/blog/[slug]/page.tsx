@@ -9,7 +9,7 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage(
-  { params }: { params: { slug: string } }
+  { params, searchParams }: { params: { slug: string }; searchParams: Record<string, string | string[]> }
 ) {
   const { slug } = params;
 
