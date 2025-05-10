@@ -9,13 +9,15 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage(
-  { params, searchParams }: { params: { slug: string }; searchParams: Record<string, string | string[]> }
+  props: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = params;
+  // Await the params promise to get the actual slug value
+  const { slug } = await props.params;
 
   const post = getPostBySlug(slug);
   if (new Date(post.publishDate) > new Date()) return notFound();
 
+  // Render MDX on the server
   const mdxContent = <MDXRemote source={post.content} />;
 
   return (
