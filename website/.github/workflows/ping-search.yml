@@ -1,0 +1,16 @@
+name: Ping search engines after Cloudflare Pages deploy
+
+on:
+  workflow_run:
+    workflows: ["Cloudflare Pages"]   # default name; adjust if you renamed it
+    types:
+      - completed
+jobs:
+  ping:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Google & Bing of new sitemap
+        run: |
+          curl --silent "https://www.google.com/ping?sitemap=https://www.moodhaven.app/sitemap.xml"
+          curl --silent "https://www.bing.com/ping?sitemap=https://www.moodhaven.app/sitemap.xml"
