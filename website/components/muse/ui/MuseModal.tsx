@@ -1,36 +1,44 @@
-interface MuseModalProps {
+"use client";
+
+import { motion, AnimatePresence } from "framer-motion";
+import MuseMenu from "./MuseMenu";
+
+interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
-
-export default function MuseModal({ isOpen, onClose }: MuseModalProps) {
-  if (!isOpen) return null;
-
+export default function MuseModal({ isOpen, onClose }: Props) {
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative animate-fadeIn">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-black"
-          aria-label="Close Muse Modal"
-        >
-          ✖️
-        </button>
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Muse Companion
-        </h2>
-        <div className="flex flex-col space-y-4">
-          <button className="bg-blue-100 p-3 rounded hover:bg-blue-200 transition">
-            Reflect
-          </button>
-          <button className="bg-green-100 p-3 rounded hover:bg-green-200 transition">
-            Center
-          </button>
-          <button className="bg-yellow-100 p-3 rounded hover:bg-yellow-200 transition">
-            Create
-          </button>
-        </div>
-      </div>
-    </div>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-40 bg-black/80"
+            aria-hidden="true"
+          />
+          {/* Panel */}
+          <motion.div
+            key="panel"
+            role="dialog"
+            aria-modal="true"
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.92 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          >
+            <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+              <MuseMenu onClose={onClose} />
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
