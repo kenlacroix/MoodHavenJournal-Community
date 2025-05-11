@@ -21,9 +21,9 @@ interface BlogPostPageProps {
 }
 
 // ---------------------------------------------------------------------------
-// Pre-render all blog slugs
+// Pre-render all blog slugs (sync)
 // ---------------------------------------------------------------------------
-export async function generateStaticParams(): Promise<RouteParams[]> {
+export function generateStaticParams(): RouteParams[] {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
