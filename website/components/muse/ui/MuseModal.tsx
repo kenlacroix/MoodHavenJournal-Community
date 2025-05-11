@@ -16,11 +16,19 @@ export default function MuseModal({ isOpen, onClose }: MuseModalProps) {
         >
           ✖️
         </button>
-        <h2 className="text-xl font-semibold mb-4 text-center">Muse Companion</h2>
+        <h2 className="text-xl font-semibold mb-4 text-center">
+          Muse Companion
+        </h2>
         <div className="flex flex-col space-y-4">
-          <button className="bg-blue-100 p-3 rounded hover:bg-blue-200 transition">Reflect</button>
-          <button className="bg-green-100 p-3 rounded hover:bg-green-200 transition">Center</button>
-          <button className="bg-yellow-100 p-3 rounded hover:bg-yellow-200 transition">Create</button>
+          <button className="bg-blue-100 p-3 rounded hover:bg-blue-200 transition">
+            Reflect
+          </button>
+          <button className="bg-green-100 p-3 rounded hover:bg-green-200 transition">
+            Center
+          </button>
+          <button className="bg-yellow-100 p-3 rounded hover:bg-yellow-200 transition">
+            Create
+          </button>
         </div>
       </div>
     </div>
