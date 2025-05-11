@@ -10,19 +10,28 @@ import BlogPostClient from '@/components/BlogPostClient';
 import { Heading } from '@/components/Heading';
 
 // ---------------------------------------------------------------------------
-// Pre-render all blog slugs (sync) ------------------------------------------
+// Pre-render all blog slugs (async so ReturnType = Promise<…>)
 // ---------------------------------------------------------------------------
-export function generateStaticParams(): { slug: string }[] {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
 // ---------------------------------------------------------------------------
-// Page component ------------------------------------------------------------
+// Page component
 // ---------------------------------------------------------------------------
 export default async function BlogPostPage(
-  { params }: { params: { slug: string }; searchParams?: Record<string, string | string[] | undefined> }
+  {
+    params,
+    /* searchParams is optional, include if you need it later */
+  }: {
+    params: Promise<{ slug: string }>;
+    searchParams?: Record<string, string | string[] | undefined>;
+  }
 ) {
-  const { slug } = params;
+  // Next’s type checker now thinks `params` is Promise<any>,
+  // so we await it once (harmless if it’s already plain).
+  const { slug } = await params;
+
   const post = getPostBySlug(slug);
   if (new Date(post.publishDate) > new Date()) return notFound();
 
