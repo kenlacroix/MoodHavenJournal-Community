@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 type AnimatedRevealProps = {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ type AnimatedRevealProps = {
 
 export default function AnimatedReveal({
   children,
-  className = '',
+  className = "",
   delay = 0,
 }: AnimatedRevealProps) {
   return (

@@ -1,15 +1,15 @@
 // File: app/blog/[slug]/page.tsx
 // @ts-nocheck   ← suppress TS just for this route
 
-import { getAllPosts, getPostBySlug } from '@/lib/posts';
-import { getHeadings } from '@/lib/mdx';
-import { buildToc } from '@/lib/build-toc';
-import { notFound } from 'next/navigation';
-import { MDXRemote } from 'next-mdx-remote/rsc';
-import remarkSlug from 'remark-slug';
-import remarkAutolinkHeadings from 'remark-autolink-headings';
-import BlogPostClient from '@/components/BlogPostClient';
-import { Heading } from '@/components/Heading';
+import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { getHeadings } from "@/lib/mdx";
+import { buildToc } from "@/lib/build-toc";
+import { notFound } from "next/navigation";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkSlug from "remark-slug";
+import remarkAutolinkHeadings from "remark-autolink-headings";
+import BlogPostClient from "@/components/BlogPostClient";
+import { Heading } from "@/components/Heading";
 
 // ---------------------------------------------------------------------------
 // Pre-render all blog slugs
@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 // Page component
 // ---------------------------------------------------------------------------
 export default async function BlogPostPage({ params }) {
-  const { slug } = await params;        // works whether ‘params’ is a Promise or plain
+  const { slug } = await params; // works whether ‘params’ is a Promise or plain
   const post = getPostBySlug(slug);
   if (new Date(post.publishDate) > new Date()) return notFound();
 
@@ -38,7 +38,7 @@ export default async function BlogPostPage({ params }) {
         mdxOptions: {
           remarkPlugins: [
             remarkSlug,
-            [remarkAutolinkHeadings, { behavior: 'wrap' }],
+            [remarkAutolinkHeadings, { behavior: "wrap" }],
           ],
         },
       }}

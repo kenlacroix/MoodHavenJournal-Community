@@ -1,13 +1,13 @@
 // components/WaitlistModal.tsx
-'use client';
+"use client";
 
-import { useState, useEffect, useRef, FormEvent } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2 } from 'lucide-react';
-import FocusTrap from 'focus-trap-react';
+import { useState, useEffect, useRef, FormEvent } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Loader2 } from "lucide-react";
+import FocusTrap from "focus-trap-react";
 
 // Replace this URL with your Formspree endpoint
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xeogkzgz';
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeogkzgz";
 
 type WaitlistModalProps = {
   isOpen: boolean;
@@ -17,41 +17,45 @@ type WaitlistModalProps = {
 export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
-  const [earlyVersion, setEarlyVersion] = useState('yes');
-  const [message, setMessage] = useState('');
+  const [earlyVersion, setEarlyVersion] = useState("yes");
+  const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     // Lock body scroll when modal is open and reset on close
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    document.body.style.overflow = isOpen ? "hidden" : "";
     if (isOpen && modalRef.current) modalRef.current.scrollTop = 0;
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   const handleInterestToggle = (value: string) => {
-    setInterests(prev => (prev.includes(value) ? prev.filter(i => i !== value) : [...prev, value]));
+    setInterests((prev) =>
+      prev.includes(value) ? prev.filter((i) => i !== value) : [...prev, value]
+    );
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setError('');
+    setError("");
     try {
       const payload = { email, interests, earlyVersion, message };
       const res = await fetch(FORMSPREE_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('Network response was not ok');
+      if (!res.ok) throw new Error("Network response was not ok");
       setSuccess(true);
       setTimeout(onClose, 2000);
     } catch {
-      setError('Submission failed. Please try again.');
+      setError("Submission failed. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -59,7 +63,11 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
   const fieldVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.3, duration: 0.6 } }),
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.3, duration: 0.6 },
+    }),
   };
 
   return (
@@ -76,11 +84,16 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
             <motion.div
               ref={modalRef}
               className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 h-[90vh] max-h-[90vh] overflow-auto flex flex-col"
-              initial={{ y: '100vh' }}
+              initial={{ y: "100vh" }}
               animate={{ y: 0 }}
-              exit={{ y: '100vh' }}
-              transition={{ type: 'spring', stiffness: 200, damping: 25, duration: 0.8 }}
-              onClick={e => e.stopPropagation()}
+              exit={{ y: "100vh" }}
+              transition={{
+                type: "spring",
+                stiffness: 200,
+                damping: 25,
+                duration: 0.8,
+              }}
+              onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={onClose}
@@ -90,7 +103,10 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 <X size={28} />
               </button>
 
-              <form onSubmit={handleSubmit} className="p-6 pt-10 flex-1 flex flex-col">
+              <form
+                onSubmit={handleSubmit}
+                className="p-6 pt-10 flex-1 flex flex-col"
+              >
                 {success ? (
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -102,7 +118,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       🎉 You're on the list!
                     </h2>
                     <p className="text-sm text-gray-500">
-                      Thanks for joining! We'll reach out when early access is available.
+                      Thanks for joining! We'll reach out when early access is
+                      available.
                     </p>
                   </motion.div>
                 ) : (
@@ -142,7 +159,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                         type="email"
                         required
                         value={email}
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="mt-1 p-2 bg-[#F7F9FA] border border-[#A0A4A8] rounded-md focus:outline-none focus:ring-2 focus:ring-[#6C9BD1] focus:border-[#6C9BD1] text-[#2C3E50]"
                         placeholder="you@example.com"
                       />
@@ -161,21 +178,26 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       </legend>
                       <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {[
-                          'Journaling for mental health',
-                          'Gratitude tracking',
-                          'Privacy-first tools',
-                          'Mood tracking',
-                          'Supporting the mission',
-                          'Just curious',
-                        ].map(option => (
-                          <label key={option} className="inline-flex items-center">
+                          "Journaling for mental health",
+                          "Gratitude tracking",
+                          "Privacy-first tools",
+                          "Mood tracking",
+                          "Supporting the mission",
+                          "Just curious",
+                        ].map((option) => (
+                          <label
+                            key={option}
+                            className="inline-flex items-center"
+                          >
                             <input
                               type="checkbox"
                               className="form-checkbox h-4 w-4 text-[#6C9BD1] border-[#A0A4A8]"
                               checked={interests.includes(option)}
                               onChange={() => handleInterestToggle(option)}
                             />
-                            <span className="ml-2 text-sm text-[#2C3E50]">{option}</span>
+                            <span className="ml-2 text-sm text-[#2C3E50]">
+                              {option}
+                            </span>
                           </label>
                         ))}
                       </div>
@@ -194,7 +216,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       </label>
                       <select
                         value={earlyVersion}
-                        onChange={e => setEarlyVersion(e.target.value)}
+                        onChange={(e) => setEarlyVersion(e.target.value)}
                         className="mt-1 p-2 bg-[#F7F9FA] border border-[#A0A4A8] rounded-md focus:outline-none focus:ring-2 focus:ring-[#6C9BD1] text-[#2C3E50]"
                       >
                         <option value="yes">Yes</option>
@@ -215,12 +237,14 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                       </label>
                       <textarea
                         value={message}
-                        onChange={e => setMessage(e.target.value)}
+                        onChange={(e) => setMessage(e.target.value)}
                         className="mt-1 p-2 bg-[#F7F9FA] border border-[#A0A4A8] rounded-md focus:outline-none focus:ring-2 focus:ring-[#6C9BD1] text-[#2C3E50] flex-1"
                         placeholder="Your thoughts..."
                         maxLength={250}
                       />
-                      <p className="text-xs text-gray-400 mt-1 self-end">{message.length}/250</p>
+                      <p className="text-xs text-gray-400 mt-1 self-end">
+                        {message.length}/250
+                      </p>
                     </motion.div>
 
                     {error && (
@@ -247,10 +271,11 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     >
                       {submitting ? (
                         <>
-                          <Loader2 className="animate-spin w-5 h-5 mr-2 text-white" /> Submitting…
+                          <Loader2 className="animate-spin w-5 h-5 mr-2 text-white" />{" "}
+                          Submitting…
                         </>
                       ) : (
-                        'Submit'
+                        "Submit"
                       )}
                     </motion.button>
                   </>

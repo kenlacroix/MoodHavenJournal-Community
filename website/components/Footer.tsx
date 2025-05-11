@@ -45,11 +45,31 @@ export default function Footer() {
           className="flex justify-center items-center flex-wrap gap-6 mb-10"
         >
           {[
-            { href: "https://moodhaven.substack.com", icon: <FaRss />, title: "Substack" },
-            { href: "https://github.com/kenlacroix/MoodHavenJournal-Community", icon: <FaGithub />, title: "GitHub" },
-            { href: "https://x.com/moodhavenapp", icon: <FaTwitter />, title: "X (Twitter)" },
-            { href: "https://bsky.app/profile/moodhavenapp.bsky.social", icon: <SiBluesky />, title: "Bluesky" },
-            { href: "https://www.linkedin.com/company/moodhavenapp/", icon: <FaLinkedin />, title: "LinkedIn" },
+            {
+              href: "https://moodhaven.substack.com",
+              icon: <FaRss />,
+              title: "Substack",
+            },
+            {
+              href: "https://github.com/kenlacroix/MoodHavenJournal-Community",
+              icon: <FaGithub />,
+              title: "GitHub",
+            },
+            {
+              href: "https://x.com/moodhavenapp",
+              icon: <FaTwitter />,
+              title: "X (Twitter)",
+            },
+            {
+              href: "https://bsky.app/profile/moodhavenapp.bsky.social",
+              icon: <SiBluesky />,
+              title: "Bluesky",
+            },
+            {
+              href: "https://www.linkedin.com/company/moodhavenapp/",
+              icon: <FaLinkedin />,
+              title: "LinkedIn",
+            },
           ].map((item, index) => (
             <AnimatedReveal key={item.title} delay={index * 0.1}>
               <SocialIcon href={item.href} title={item.title}>
@@ -94,9 +114,7 @@ export default function Footer() {
       <AnimatePresence>
         {showTop && (
           <motion.button
-            onClick={() =>
-              window.scrollTo({ top: 0, behavior: "smooth" })
-            }
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}

@@ -1,5 +1,5 @@
 // lib/getSubstackPosts.ts
-import Parser from 'rss-parser';
+import Parser from "rss-parser";
 
 type SubstackPost = {
   title: string;
@@ -10,12 +10,12 @@ type SubstackPost = {
 
 export async function getSubstackPosts(): Promise<SubstackPost[]> {
   const parser = new Parser();
-  const feed = await parser.parseURL('https://moodhaven.substack.com/feed');
+  const feed = await parser.parseURL("https://moodhaven.substack.com/feed");
 
   return feed.items.slice(0, 3).map((item) => ({
-    title: item.title ?? '',
-    link: item.link ?? '#',
-    date: item.pubDate ?? '',
-    snippet: item.contentSnippet ?? '',
+    title: item.title ?? "",
+    link: item.link ?? "#",
+    date: item.pubDate ?? "",
+    snippet: item.contentSnippet ?? "",
   }));
 }

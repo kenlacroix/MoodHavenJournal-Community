@@ -1,10 +1,10 @@
 // File: /components/Heading.tsx
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface HeadingProps {
-  as: 'h2' | 'h3';
+  as: "h2" | "h3";
   id: string;
   children: React.ReactNode;
 }
