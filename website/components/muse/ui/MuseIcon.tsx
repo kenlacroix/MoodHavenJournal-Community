@@ -1,20 +1,21 @@
-import { useState } from "react";
-import MuseModal from "./MuseModal";
+"use client";
 
-export default function MuseIcon() {
-  const [isOpen, setIsOpen] = useState(false);
+import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 
+export default function MuseIcon({ onOpen }: { onOpen: () => void }) {
   return (
-    <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 rounded-full bg-white shadow-lg p-3 hover:scale-105 hover:bg-gray-100 transition"
-        aria-label="Open Muse Companion"
-      >
-        🪶 {/* Feather emoji as placeholder; replace with an SVG icon later */}
-      </button>
-
-      <MuseModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-    </>
+    <motion.button
+      type="button"
+      aria-label="Open Muse"
+      onClick={onOpen}
+      initial={{ scale: 1, opacity: 0.8 }}
+      whileHover={{ scale: 1.15, opacity: 1 }}
+      whileTap={{ scale: 0.95 }}
+      className="fixed bottom-6 right-6 z-50 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 p-3 shadow-lg shadow-indigo-700/30
+                 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-300"
+    >
+      <Sparkles className="h-6 w-6 text-white drop-shadow" />
+    </motion.button>
   );
 }
