@@ -28,12 +28,26 @@ export default function TableOfContents({
     headings.forEach(h2 =>
       h2.children.forEach(h3 => {
         if (h3.text.toLowerCase() === 'references') {
-          refItem = { id: h3.id, text: h3.text, children: [] };
+          refItem = {
+            id: h3.id,
+            text: h3.text,
+            depth: h3.depth,          // ← carry over depth from the H3
+            children: [],
+          };
         }
       })
     );
     if (refItem) items.push(refItem);
-    return [{ id: 'top', text: 'Introduction', children: [] }, ...items];
+
+    return [
+      {
+        id: 'top',
+        text: 'Introduction',
+        depth: 2,      // treat like an H2 so styling remains consistent
+        children: [],
+      },
+      ...items,
+    ];
   }, [headings]);
 
   // State
