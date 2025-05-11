@@ -1,10 +1,10 @@
 // File: /components/BlogPostClient.tsx
-'use client';
+"use client";
 
-import React, { ReactNode, useState } from 'react';
-import { motion } from 'framer-motion';
-import TableOfContents from './TableOfContents';
-import { TocItem } from '@/lib/build-toc';
+import React, { ReactNode, useState } from "react";
+import { motion } from "framer-motion";
+import TableOfContents from "./TableOfContents";
+import { TocItem } from "@/lib/build-toc";
 
 interface BlogPostClientProps {
   title: string;
@@ -63,9 +63,9 @@ export default function BlogPostClient({
 
           <p className="text-gray-500 text-sm mb-8">
             {new Date(publishDate).toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             })}
           </p>
 
