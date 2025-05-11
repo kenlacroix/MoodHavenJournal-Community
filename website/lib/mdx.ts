@@ -12,7 +12,7 @@ export async function getHeadings(mdxContent: string): Promise<Heading[]> {
   const processor = unified()
     .use(remarkParse)
     .use(remarkMdx)
-    .use(remarkSlug);
+    .use(remarkSlug as any);
 
   // 2. Parse to a tree…
   const tree = processor.parse(mdxContent);
