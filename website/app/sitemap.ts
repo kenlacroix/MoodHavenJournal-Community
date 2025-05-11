@@ -2,36 +2,32 @@
 import { MetadataRoute } from 'next';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { getAllPosts } from '@/lib/posts';   // ← your helper
+import { getAllPosts } from '@/lib/posts';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = 'https://www.moodhaven.app';
 
-  // --- static pages you want indexed ---
-  const staticUrls: MetadataRoute.SitemapUrl[] = [
-    '', '/founders', '/privacy', '/community',
-  ].map((p) => ({
+  // ---- static marketing pages --------------------------------------------
+  const staticUrls = ['', '/founders', '/privacy', '/community'].map((p) => ({
     url: `${base}${p}`,
     lastModified: '2025-05-11',
-    changeFrequency: 'monthly',
+    changeFrequency: 'monthly' as const,
     priority: 0.8,
   }));
 
-  // --- blog posts ---
-  const posts = getAllPosts();               // sync fn is fine here
-  const postUrls: MetadataRoute.SitemapUrl[] = await Promise.all(
+  // ---- blog posts ---------------------------------------------------------
+  const posts = getAllPosts();
+  const postUrls = await Promise.all(
     posts.map(async (p) => {
-      // if publishDate missing, fall back to file mtime
+      // fallback to file mtime if publishDate missing
       const full = path.join(process.cwd(), 'content/posts', `${p.slug}.mdx`);
       const stat = await fs.stat(full);
-      const updated = p.publishDate
-        ? new Date(p.publishDate)
-        : stat.mtime;
+      const updated = p.publishDate ? new Date(p.publishDate) : stat.mtime;
 
       return {
         url: `${base}/blog/${p.slug}`,
         lastModified: updated.toISOString(),
-        changeFrequency: 'weekly',
+        changeFrequency: 'weekly' as const,
         priority: 0.9,
       };
     }),
