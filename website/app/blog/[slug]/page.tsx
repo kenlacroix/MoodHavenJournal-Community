@@ -1,4 +1,5 @@
-// File: /app/blog/[slug]/page.tsx
+// File: app/blog/[slug]/page.tsx
+import type { PageProps } from 'next';           // ✅ Next helper
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 import { getHeadings } from '@/lib/mdx';
 import { buildToc, TocItem } from '@/lib/build-toc';
@@ -7,22 +8,29 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkSlug from 'remark-slug';
 import remarkAutolinkHeadings from 'remark-autolink-headings';
 import BlogPostClient from '@/components/BlogPostClient';
-import { Heading } from '@/components/Heading';  // ← our new Heading component
+import { Heading } from '@/components/Heading';  // ← Heading component
 
-export async function generateStaticParams() {
-  return getAllPosts().map(post => ({ slug: post.slug }));
+// ---- route params type -----------------------------------------------------
+type Params = { slug: string };
+
+// ---- prerender all blog slugs ---------------------------------------------
+export async function generateStaticParams(): Promise<Params[]> {
+  return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
+// ---- page component --------------------------------------------------------
 export default async function BlogPostPage(
-  { params }: { params: { slug: string } }
+  { params }: PageProps<Params>            // ✅ satisfy Next 15 constraint
 ) {
   const { slug } = params;
   const post = getPostBySlug(slug);
   if (new Date(post.publishDate) > new Date()) return notFound();
 
+  // Build TOC
   const flatHeadings = await getHeadings(post.content);
   const toc: TocItem[] = buildToc(flatHeadings);
 
+  // Render MDX
   const mdxContent = (
     <MDXRemote
       source={post.content}
@@ -35,8 +43,8 @@ export default async function BlogPostPage(
         },
       }}
       components={{
-        h2: props => <Heading as="h2" {...props} />,
-        h3: props => <Heading as="h3" {...props} />,
+        h2: (props) => <Heading as="h2" {...props} />,
+        h3: (props) => <Heading as="h3" {...props} />,
       }}
     />
   );
@@ -48,7 +56,7 @@ export default async function BlogPostPage(
       mdx={mdxContent}
       heroImage={post.heroImage}
       headings={toc}
-      accentColor={post.accentColor}   /* ← pass the frontmatter accent */
+      accentColor={post.accentColor}   /* ← front-matter accent */
     />
   );
 }
