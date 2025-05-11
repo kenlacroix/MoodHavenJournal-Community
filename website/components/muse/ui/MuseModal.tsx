@@ -1,13 +1,22 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 import MuseMenu from "./MuseMenu";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
+
 export default function MuseModal({ isOpen, onClose }: Props) {
+  // ✅ Esc key closes modal
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    if (isOpen) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -22,6 +31,7 @@ export default function MuseModal({ isOpen, onClose }: Props) {
             className="fixed inset-0 z-40 bg-black/80"
             aria-hidden="true"
           />
+
           {/* Panel */}
           <motion.div
             key="panel"
