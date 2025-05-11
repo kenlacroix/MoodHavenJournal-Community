@@ -11,14 +11,23 @@
   },
   "dependencies": {
     "@shadcn/ui": "^0.0.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "date-fns": "^4.1.0",
     "focus-trap-react": "^11.0.3",
     "framer-motion": "^12.9.4",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
+    "next-mdx-remote": "^5.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
-    "rss-parser": "^3.13.0"
+    "remark-autolink-headings": "^7.0.1",
+    "remark-mdx": "^3.1.0",
+    "remark-parse": "^11.0.0",
+    "remark-slug": "^7.0.1",
+    "rss-parser": "^3.13.0",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@types/node": "^20",

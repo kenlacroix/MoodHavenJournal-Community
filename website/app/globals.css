@@ -2,10 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 1. Smooth scrolling for anchor links & heading offset */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  /* Ensure headings clear the fixed header when linked-to */
+  h2,
+  h3 {
+    scroll-margin-top: 5rem; /* adjust to match your header height */
+  }
+}
+
 :root {
   --background: #F8F6F2;
   --foreground: #171717;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 }
 
 /* ✅ Override dark mode system preferences to keep light theme */
@@ -82,7 +95,7 @@ body {
   scrollbar-width: none;
 }
 
-/* ✨ Fade‐Up Animation for Entrance Effects */
+/* ✨ Fade-Up Animation for Entrance Effects */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -110,5 +123,92 @@ body {
   .motion-safe\\:animate-fadeUp,
   .animate-fadeUp {
     animation: none !important;
+  }
+}
+
+/* ✨ Notes on supporting CSS for TOC animations */
+@layer utilities {
+  /* Flash highlight on jumped-to heading */
+  @keyframes flash {
+    from { background-color: rgba(255,199,44,0.6); }
+    to   { background-color: transparent; }
+  }
+  .animate-flash {
+    animation: flash 0.8s ease;
+  }
+
+  /* One-time pulse indicator on active link’s left edge */
+  @keyframes pulse-once {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .animate-pulse-once::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: rgba(255,159,10,0.5);
+    animation: pulse-once 1s ease-out;
+  }
+
+  /* 3) Custom scrollbar for TOC pane */
+  .toc-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+  .toc-scrollbar:hover {
+    scrollbar-color: var(--toc-accent) transparent;
+  }
+  .toc-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .toc-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .toc-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: var(--toc-accent);
+    border-radius: 3px;
+  }
+
+  /* 4) Hover-preview tooltip */
+  .toc-tooltip {
+    position: fixed;
+    max-width: 200px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    z-index: 1000;
+    pointer-events: none;
+    white-space: normal;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+}
+
+/* ✨ Print-Friendly Adjustments */
+@media print {
+  /* Hide sidebar/TOC */
+  .print\:hidden {
+    display: none !important;
+  }
+  /* Article margins */
+  .print\:mx-8 {
+    margin-left: 2rem !important;
+    margin-right: 2rem !important;
+  }
+  .print\:my-8 {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
+  /* Increase type size & leading */
+  .print\:text-lg {
+    font-size: 1.125rem !important;
+  }
+  .print\:leading-relaxed {
+    line-height: 1.75 !important;
   }
 }
