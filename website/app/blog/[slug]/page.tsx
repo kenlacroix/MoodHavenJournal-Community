@@ -10,20 +10,20 @@ import BlogPostClient from '@/components/BlogPostClient';
 import { Heading } from '@/components/Heading';
 
 // ---------------------------------------------------------------------------
-// Types
+// Types — renamed to avoid clash with Next internals
 // ---------------------------------------------------------------------------
-type Params = { slug: string };
+type RouteParams = { slug: string };
 
 interface BlogPostPageProps {
-  params: Params;
-  /** provided automatically by Next.js app router */
+  params: RouteParams;
+  /** provided automatically by the Next.js app router */
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
 // ---------------------------------------------------------------------------
 // Pre-render all blog slugs
 // ---------------------------------------------------------------------------
-export async function generateStaticParams(): Promise<Params[]> {
+export async function generateStaticParams(): Promise<RouteParams[]> {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
