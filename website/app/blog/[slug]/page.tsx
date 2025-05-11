@@ -10,27 +10,18 @@ import BlogPostClient from '@/components/BlogPostClient';
 import { Heading } from '@/components/Heading';
 
 // ---------------------------------------------------------------------------
-// Types — renamed to avoid clash with Next internals
+// Pre-render all blog slugs (sync) ------------------------------------------
 // ---------------------------------------------------------------------------
-type RouteParams = { slug: string };
-
-interface BlogPostPageProps {
-  params: RouteParams;
-  /** provided automatically by the Next.js app router */
-  searchParams?: Record<string, string | string[] | undefined>;
-}
-
-// ---------------------------------------------------------------------------
-// Pre-render all blog slugs (sync)
-// ---------------------------------------------------------------------------
-export function generateStaticParams(): RouteParams[] {
+export function generateStaticParams(): { slug: string }[] {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
 // ---------------------------------------------------------------------------
-// Page component
+// Page component ------------------------------------------------------------
 // ---------------------------------------------------------------------------
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogPostPage(
+  { params }: { params: { slug: string }; searchParams?: Record<string, string | string[] | undefined> }
+) {
   const { slug } = params;
   const post = getPostBySlug(slug);
   if (new Date(post.publishDate) > new Date()) return notFound();
