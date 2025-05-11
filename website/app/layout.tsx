@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
 
         <div className="min-h-screen flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 py-8">
-          <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden">
+          <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-visible">
             <NavBar />
             {/* main gets the skip-link target */}
             <main id="main-content">{children}</main>
