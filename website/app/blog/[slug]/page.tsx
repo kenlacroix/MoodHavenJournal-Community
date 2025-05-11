@@ -1,5 +1,4 @@
 // File: app/blog/[slug]/page.tsx
-import type { PageProps } from 'next';           // ✅ Next helper
 import { getAllPosts, getPostBySlug } from '@/lib/posts';
 import { getHeadings } from '@/lib/mdx';
 import { buildToc, TocItem } from '@/lib/build-toc';
@@ -8,20 +7,30 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkSlug from 'remark-slug';
 import remarkAutolinkHeadings from 'remark-autolink-headings';
 import BlogPostClient from '@/components/BlogPostClient';
-import { Heading } from '@/components/Heading';  // ← Heading component
+import { Heading } from '@/components/Heading';
 
-// ---- route params type -----------------------------------------------------
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 type Params = { slug: string };
 
-// ---- prerender all blog slugs ---------------------------------------------
+interface BlogPostPageProps {
+  params: Params;
+  /** provided automatically by Next.js app router */
+  searchParams?: Record<string, string | string[] | undefined>;
+}
+
+// ---------------------------------------------------------------------------
+// Pre-render all blog slugs
+// ---------------------------------------------------------------------------
 export async function generateStaticParams(): Promise<Params[]> {
   return getAllPosts().map((post) => ({ slug: post.slug }));
 }
 
-// ---- page component --------------------------------------------------------
-export default async function BlogPostPage(
-  { params }: PageProps<Params>            // ✅ satisfy Next 15 constraint
-) {
+// ---------------------------------------------------------------------------
+// Page component
+// ---------------------------------------------------------------------------
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = params;
   const post = getPostBySlug(slug);
   if (new Date(post.publishDate) > new Date()) return notFound();
@@ -56,7 +65,7 @@ export default async function BlogPostPage(
       mdx={mdxContent}
       heroImage={post.heroImage}
       headings={toc}
-      accentColor={post.accentColor}   /* ← front-matter accent */
+      accentColor={post.accentColor}
     />
   );
 }
