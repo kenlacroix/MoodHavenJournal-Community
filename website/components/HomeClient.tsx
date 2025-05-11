@@ -47,7 +47,10 @@ export default function HomeClient({ posts }: Props) {
   return (
     <div className="w-full">
       {/* Waitlist Modal Integration */}
-      <WaitlistModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <WaitlistModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
       {/* Hero Section */}
       <section className="relative text-white py-16 md:py-28 overflow-hidden md:mask-fade-edges">
@@ -64,7 +67,8 @@ export default function HomeClient({ posts }: Props) {
             Your Private, Calm Space to Reflect
           </h1>
           <p className="text-lg md:text-xl text-blue-100 mt-2">
-            MoodHaven Journal gives you a warm, secure corner of the web — where your thoughts stay yours.
+            MoodHaven Journal gives you a warm, secure corner of the web — where
+            your thoughts stay yours.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-6">
             <button
@@ -87,24 +91,33 @@ export default function HomeClient({ posts }: Props) {
       {/* Value Props Section */}
       <section className="pt-14 pb-14 bg-[var(--background)] -mt-2">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
-          {['Privacy', 'Calm Interface', 'Community'].map((label, i) => (
+          {["Privacy", "Calm Interface", "Community"].map((label, i) => (
             <AnimatedReveal
               key={label}
               delay={i * 0.2}
               className="space-y-4 p-4 transition-transform duration-300 ease-in-out hover:scale-[1.015] hover:shadow-md hover:shadow-neutral-200/50 rounded-xl"
             >
               <div className="h-20 flex items-end justify-center">
-                {label === 'Privacy' && <Lock className="w-16 h-16 text-[#3A6EA5]" />}
-                {label === 'Calm Interface' && <Feather className="w-16 h-16 text-[#4A90E2]" />}
-                {label === 'Community' && <Heart className="w-16 h-16 text-[#F28C38]" />}
+                {label === "Privacy" && (
+                  <Lock className="w-16 h-16 text-[#3A6EA5]" />
+                )}
+                {label === "Calm Interface" && (
+                  <Feather className="w-16 h-16 text-[#4A90E2]" />
+                )}
+                {label === "Community" && (
+                  <Heart className="w-16 h-16 text-[#F28C38]" />
+                )}
               </div>
-              <h3 className="text-xl font-semibold text-neutral-800 tracking-tight">{label}</h3>
+              <h3 className="text-xl font-semibold text-neutral-800 tracking-tight">
+                {label}
+              </h3>
               <p className="text-sm text-neutral-600 leading-relaxed">
-                {label === 'Privacy' &&
-                  'Your entries stay with you. Encrypted and local-first — no cloud, no leaks.'}
-                {label === 'Calm Interface' &&
-                  'A soothing, distraction-free design that helps you breathe and reflect.'}
-                {label === 'Community' && 'Connect with others on a similar path.'}
+                {label === "Privacy" &&
+                  "Your entries stay with you. Encrypted and local-first — no cloud, no leaks."}
+                {label === "Calm Interface" &&
+                  "A soothing, distraction-free design that helps you breathe and reflect."}
+                {label === "Community" &&
+                  "Connect with others on a similar path."}
               </p>
             </AnimatedReveal>
           ))}
@@ -116,7 +129,9 @@ export default function HomeClient({ posts }: Props) {
         <div className="mx-auto max-w-[860px] flex flex-col md:flex-row md:justify-between gap-10">
           {/* Newsletter Scroller */}
           <AnimatedReveal className="px-6 py-4 w-full max-w-lg flex flex-col justify-between">
-            <h2 className="text-sm font-medium text-neutral-700 mb-2">Latest from the Newsletter</h2>
+            <h2 className="text-sm font-medium text-neutral-700 mb-2">
+              Latest from the Newsletter
+            </h2>
 
             {!isMobile ? (
               <div className="relative overflow-hidden group">
@@ -136,12 +151,14 @@ export default function HomeClient({ posts }: Props) {
                       </a>
                       <p className="text-xs text-neutral-400 mt-1">
                         {new Date(post.date).toLocaleDateString(undefined, {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
                         })}
                       </p>
-                      <p className="text-sm text-neutral-600 mt-2">{post.snippet}</p>
+                      <p className="text-sm text-neutral-600 mt-2">
+                        {post.snippet}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -154,7 +171,7 @@ export default function HomeClient({ posts }: Props) {
                 tabIndex={0}
                 onKeyDown={onCarouselKey}
                 className="relative overflow-x-auto whitespace-nowrap snap-x snap-mandatory scrollbar-hide py-2 px-4 cursor-grab hover:cursor-grabbing"
-                style={{ WebkitOverflowScrolling: 'touch' }}
+                style={{ WebkitOverflowScrolling: "touch" }}
               >
                 {posts.map((post, idx) => (
                   <div
@@ -171,12 +188,14 @@ export default function HomeClient({ posts }: Props) {
                     </a>
                     <p className="text-xs text-neutral-400 mt-1">
                       {new Date(post.date).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
                       })}
                     </p>
-                    <p className="text-sm text-neutral-600 mt-2">{post.snippet}</p>
+                    <p className="text-sm text-neutral-600 mt-2">
+                      {post.snippet}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -200,7 +219,9 @@ export default function HomeClient({ posts }: Props) {
           >
             <div className="flex flex-col items-center md:items-start">
               <p className="text-sm text-neutral-700 font-semibold">Built by</p>
-              <h3 className="text-lg font-bold text-neutral-900">Ken LaCroix</h3>
+              <h3 className="text-lg font-bold text-neutral-900">
+                Ken LaCroix
+              </h3>
               <div className="relative mt-6">
                 <div className="absolute inset-0 rounded-full bg-[#F28C38]/10 blur-sm scale-110" />
                 <img

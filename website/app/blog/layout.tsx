@@ -1,7 +1,7 @@
 // File: /app/blog/layout.tsx
-'use client';
+"use client";
 
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from "react";
 
 export default function BlogLayout({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState(0);
@@ -13,8 +13,8 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
       const progress = (scrollTop / docHeight) * 100;
       setProgress(progress);
     };
-    window.addEventListener('scroll', updateProgress);
-    return () => window.removeEventListener('scroll', updateProgress);
+    window.addEventListener("scroll", updateProgress);
+    return () => window.removeEventListener("scroll", updateProgress);
   }, []);
 
   return (
@@ -26,9 +26,7 @@ export default function BlogLayout({ children }: { children: ReactNode }) {
         />
       </div>
       {/* Force a consistent light background on blog pages */}
-      <main className="bg-gray-50 min-h-screen">
-        {children}
-      </main>
+      <main className="bg-gray-50 min-h-screen">{children}</main>
     </>
   );
 }

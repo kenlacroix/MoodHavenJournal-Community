@@ -11,8 +11,8 @@ export default function HeroParticles() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = 400;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = 400);
 
     class Raindrop {
       x: number;

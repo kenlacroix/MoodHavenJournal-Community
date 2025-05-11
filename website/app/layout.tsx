@@ -38,7 +38,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const currentYear = new Date().getFullYear();
   return (
     <html lang="en">
@@ -50,17 +54,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             "@graph": [
               {
                 "@type": "Organization",
-                "name": "MoodHaven Journal",
-                "url": "https://moodhaven.app",
-                "logo": "https://moodhaven.app/icons/opengraph-image.png"
+                name: "MoodHaven Journal",
+                url: "https://moodhaven.app",
+                logo: "https://moodhaven.app/icons/opengraph-image.png",
               },
               {
                 "@type": "WebSite",
-                "url": "https://moodhaven.app",
-                "name": "MoodHaven Journal",
-                "publisher": { "@id": "https://moodhaven.app/#org" }
-              }
-            ]
+                url: "https://moodhaven.app",
+                name: "MoodHaven Journal",
+                publisher: { "@id": "https://moodhaven.app/#org" },
+              },
+            ],
           })}
         </Script>
       </head>

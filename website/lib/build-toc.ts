@@ -1,5 +1,5 @@
 // File: /lib/build-toc.ts
-import { Heading } from './mdx';
+import { Heading } from "./mdx";
 
 export type TocItem = Heading & { children: TocItem[] };
 
