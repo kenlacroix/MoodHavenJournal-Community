@@ -1,39 +1,22 @@
 // file: src/components/muse/ui/MusePromptView.tsx
-import React, { useEffect } from "react";
+import React from "react";
 import ThinkingDots from "./ThinkingDots";
-import useDailyQuota from "../hooks/useDailyQuota";
-import useLastPrompt from "../hooks/useLastPrompt";
 
 interface MusePromptViewProps {
   prompt: string;
   isLoading: boolean;
+  remaining: number;
+  isQuotaExceeded: boolean;
   onClose: () => void;
 }
 
 export default function MusePromptView({
   prompt,
   isLoading,
+  remaining,
+  isQuotaExceeded,
   onClose,
 }: MusePromptViewProps) {
-  const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
-  const { lastPrompt, savePrompt } = useLastPrompt();
-
-  // Persist prompt when loaded
-  useEffect(() => {
-    if (!isLoading && prompt) {
-      savePrompt(prompt);
-    }
-  }, [isLoading, prompt, savePrompt]);
-
-  // Increment quota once per prompt display
-  useEffect(() => {
-    if (!isLoading && !isQuotaExceeded) {
-      increment();
-    }
-  }, [isLoading, isQuotaExceeded, increment]);
-
-  const display = isLoading ? null : lastPrompt || prompt;
-
   if (isQuotaExceeded) {
     return (
       <div className="p-4 bg-white rounded-lg shadow-md max-w-md mx-auto text-center">
@@ -66,7 +49,7 @@ export default function MusePromptView({
         {isLoading ? (
           <ThinkingDots />
         ) : (
-          <p className="text-base leading-relaxed">{display}</p>
+          <p className="text-base leading-relaxed">{prompt}</p>
         )}
       </div>
       <p className="text-sm text-gray-500 text-center">

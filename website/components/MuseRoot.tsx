@@ -6,9 +6,10 @@ import MuseIcon from "@/components/muse/ui/MuseIcon";
 import MuseModal from "@/components/muse/ui/MuseModal";
 import MusePromptView from "@/components/muse/ui/MusePromptView";
 import useHotkey from "@/components/muse/hooks/useHotkey";
+import useDailyQuota from "@/components/muse/hooks/useDailyQuota";
 
 async function fetchPrompt(): Promise<string> {
-  // TODO: implement actual prompt generation logic (e.g., API call or local algorithm)
+  // TODO: implement real prompt logic
   return "This is a placeholder prompt.";
 }
 
@@ -18,16 +19,19 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const toggleMuse = () => setOpen((o) => !o);
 
+  const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
   useHotkey({ toggleMuse });
 
   const openMuse = async () => {
-    setIsLoading(true);
     setOpen(true);
+    if (isQuotaExceeded) return;
+    setIsLoading(true);
     try {
       const p = await fetchPrompt();
       setPrompt(p);
+      increment();
     } catch (err) {
-      console.error("Error fetching prompt:", err);
+      console.error(err);
       setPrompt("Unable to load prompt.");
     } finally {
       setIsLoading(false);
@@ -37,13 +41,13 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-
-      {/* Global Muse UI */}
       <MuseIcon onOpen={openMuse} />
       <MuseModal isOpen={open} onClose={toggleMuse}>
         <MusePromptView
           prompt={prompt}
           isLoading={isLoading}
+          remaining={remaining}
+          isQuotaExceeded={isQuotaExceeded}
           onClose={toggleMuse}
         />
       </MuseModal>
