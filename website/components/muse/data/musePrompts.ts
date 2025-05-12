@@ -1,17 +1,21 @@
-export const musePrompts = {
+// file: src/components/muse/data/musePrompts.ts
+// Example prompt banks. Adjust categories and entries as desired.
+const musePrompts = {
   reflect: [
-    "What emotion is most present for you today?",
-    "Write about a moment you felt truly yourself.",
-    "What does gratitude mean to you right now?",
+    "What is one thing you're grateful for today?",
+    "Recall a recent challenge and what it taught you.",
+    "Describe a moment that made you smile this week.",
   ],
   center: [
-    "Pause and take three deep breaths. What do you notice?",
-    "Visualize a calm place. Describe it in detail.",
-    "What tension can you let go of today?",
+    "Take a deep breath and list three things you feel right now.",
+    "Notice the sensations in your body as you breathe.",
+    "Focus on a single word that represents your current mood.",
   ],
   create: [
-    "Invent a title for today's chapter of your life.",
-    "If you could plant a garden anywhere, where would it be?",
-    "Describe a color without naming it.",
+    "Invent a short story about a journey to a new world.",
+    "Compose a haiku about the weather outside.",
+    "Sketch a future vision of yourself in five years.",
   ],
-} as const;
+};
+
+export default musePrompts;

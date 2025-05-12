@@ -57,7 +57,7 @@ export default function MusePromptView({
         <button
           onClick={onClose}
           aria-label="Close Prompt View"
-          className="text-gray-500 hover:text-gray-700"
+          className="text-gray-500 hover:text-gray-700 focus:outline-none"
         >
           ✕
         </button>

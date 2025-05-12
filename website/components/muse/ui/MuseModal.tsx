@@ -1,54 +1,39 @@
-"use client";
+// file: src/components/muse/ui/MuseModal.tsx
+import React from "react";
+import FocusTrap from "focus-trap-react";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
-import MuseMenu from "./MuseMenu";
-
-interface Props {
+interface MuseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  children: React.ReactNode;
 }
 
-export default function MuseModal({ isOpen, onClose }: Props) {
-  // ✅ Esc key closes modal
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    if (isOpen) window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
+export default function MuseModal({
+  isOpen,
+  onClose,
+  children,
+}: MuseModalProps) {
+  if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            exit={{ opacity: 0 }}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <FocusTrap>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="relative bg-white rounded-lg shadow-lg p-6 outline-none max-w-lg w-full"
+          tabIndex={-1}
+        >
+          <button
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-black/80"
-            aria-hidden="true"
-          />
-
-          {/* Panel */}
-          <motion.div
-            key="panel"
-            role="dialog"
-            aria-modal="true"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            aria-label="Close modal"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
           >
-            <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-              <MuseMenu onClose={onClose} />
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+            ✕
+          </button>
+          {children}
+        </div>
+      </FocusTrap>
+    </div>
   );
 }
