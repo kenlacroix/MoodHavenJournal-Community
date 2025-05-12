@@ -1,6 +1,7 @@
 // file: src/components/muse/ui/MusePromptView.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import ThinkingDots from "./ThinkingDots";
+import useDailyQuota from "../hooks/useDailyQuota";
 
 interface MusePromptViewProps {
   prompt: string;
@@ -13,6 +14,30 @@ export default function MusePromptView({
   isLoading,
   onClose,
 }: MusePromptViewProps) {
+  const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
+
+  useEffect(() => {
+    if (!isLoading && !isQuotaExceeded) {
+      increment();
+    }
+  }, [isLoading, isQuotaExceeded, increment]);
+
+  if (isQuotaExceeded) {
+    return (
+      <div className="p-4 bg-white rounded-lg shadow-md max-w-md mx-auto text-center">
+        <p className="text-base mb-4">
+          You’ve reached your daily quota of prompts. Come back tomorrow!
+        </p>
+        <button
+          onClick={onClose}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+        >
+          Close
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 bg-white rounded-lg shadow-md max-w-md mx-auto">
       <div className="flex justify-between items-center mb-4">
@@ -32,6 +57,9 @@ export default function MusePromptView({
           <p className="text-base leading-relaxed">{prompt}</p>
         )}
       </div>
+      <p className="text-sm text-gray-500 text-center">
+        {remaining} prompt{remaining !== 1 ? "s" : ""} remaining today
+      </p>
     </div>
   );
 }
