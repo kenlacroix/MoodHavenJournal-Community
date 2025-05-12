@@ -1,12 +1,16 @@
+// file: src/components/muse/ui/MusePromptView.tsx
 import React from "react";
+import ThinkingDots from "./ThinkingDots";
 
 interface MusePromptViewProps {
   prompt: string;
+  isLoading: boolean;
   onClose: () => void;
 }
 
 export default function MusePromptView({
   prompt,
+  isLoading,
   onClose,
 }: MusePromptViewProps) {
   return (
@@ -21,7 +25,13 @@ export default function MusePromptView({
           ✕
         </button>
       </div>
-      <p className="text-base leading-relaxed">{prompt}</p>
+      <div className="flex justify-center py-6">
+        {isLoading ? (
+          <ThinkingDots />
+        ) : (
+          <p className="text-base leading-relaxed">{prompt}</p>
+        )}
+      </div>
     </div>
   );
 }
