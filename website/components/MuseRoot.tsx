@@ -1,66 +1,77 @@
-// file: src/components/muse/MuseRoot.tsx
+// File: src/components/muse/MuseRoot.tsx
 "use client";
 
 import { useState } from "react";
 import MuseIcon from "@/components/muse/ui/MuseIcon";
 import MuseModal from "@/components/muse/ui/MuseModal";
+import MuseMenu, { Category } from "@/components/muse/ui/MuseMenu";
 import MusePromptView from "@/components/muse/ui/MusePromptView";
 import useHotkey from "@/components/muse/hooks/useHotkey";
 import useDailyQuota from "@/components/muse/hooks/useDailyQuota";
 import useLastPrompt from "@/components/muse/hooks/useLastPrompt";
-
-async function fetchPrompt(): Promise<string> {
-  // TODO: implement real prompt logic
-  return "This is a placeholder prompt.";
-}
+import musePrompts from "@/components/muse/data/musePrompts";
 
 export default function MuseRoot({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const [prompt, setPrompt] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const toggleMuse = () => setOpen((o) => !o);
+  const [isOpen, setIsOpen] = useState(false);
+  const [view, setView] = useState<"menu" | "prompt">("menu");
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
 
-  const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
   const { lastPrompt, savePrompt } = useLastPrompt();
-  useHotkey({ toggleMuse });
+  const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const openMuse = async () => {
-    setOpen(true);
-    if (isQuotaExceeded) return;
+  useHotkey({ toggleMuse: () => setIsOpen((o) => !o) });
 
-    // Show persisted prompt if available
-    if (lastPrompt) {
-      setPrompt(lastPrompt);
-      setIsLoading(false);
-      return;
-    }
+  const openMuse = () => {
+    setView("menu");
+    setSelectedCategory(null);
+    setIsOpen(true);
+  };
 
+  const closeMuse = () => {
+    setIsOpen(false);
+    setView("menu");
+    setSelectedCategory(null);
+  };
+
+  const loadPrompt = async (category: Category) => {
     setIsLoading(true);
-    try {
-      const p = await fetchPrompt();
-      setPrompt(p);
-      savePrompt(p);
-      increment();
-    } catch (err) {
-      console.error(err);
-      setPrompt("Unable to load prompt.");
-    } finally {
-      setIsLoading(false);
-    }
+    const list = musePrompts[category];
+    const next = list[Math.floor(Math.random() * list.length)];
+    savePrompt(next);
+    increment();
+    setIsLoading(false);
+  };
+
+  const handleSelectCategory = (category: Category) => {
+    setSelectedCategory(category);
+    loadPrompt(category).then(() => setView("prompt"));
+  };
+
+  const handleNewPrompt = () => {
+    if (!selectedCategory) return;
+    loadPrompt(selectedCategory);
   };
 
   return (
     <>
       {children}
       <MuseIcon onOpen={openMuse} />
-      <MuseModal isOpen={open} onClose={toggleMuse}>
-        <MusePromptView
-          prompt={prompt}
-          isLoading={isLoading}
-          remaining={remaining}
-          isQuotaExceeded={isQuotaExceeded}
-          onClose={toggleMuse}
-        />
+      <MuseModal isOpen={isOpen} onClose={closeMuse}>
+        {view === "menu" ? (
+          <MuseMenu onSelectCategory={handleSelectCategory} />
+        ) : (
+          <MusePromptView
+            prompt={lastPrompt ?? ""}
+            isLoading={isLoading}
+            remaining={remaining}
+            isQuotaExceeded={isQuotaExceeded}
+            onClose={closeMuse}
+            onNewPrompt={handleNewPrompt}
+          />
+        )}
       </MuseModal>
     </>
   );

@@ -1,38 +1,36 @@
+// File: src/components/muse/ui/MuseMenu.tsx
 "use client";
 
-import { musePrompts } from "../data/musePrompts";
+import musePrompts from "../data/musePrompts";
+
+export type Category = keyof typeof musePrompts;
 
 interface Props {
-  onClose: () => void;
+  /** Called when the user selects a category */
+  onSelectCategory: (category: Category) => void;
 }
-export default function MuseMenu({ onClose }: Props) {
-  const handleClick = (category: keyof typeof musePrompts) => {
-    const list = musePrompts[category];
-    const random = list[Math.floor(Math.random() * list.length)];
-    console.log(`[Muse:${category}]`, random); // placeholder telemetry
-    onClose();
-  };
 
+export default function MuseMenu({ onSelectCategory }: Props) {
   const base =
-    "w-full rounded-lg py-3 font-semibold tracking-wide shadow hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+    "w-full rounded-lg py-3 font-semibold tracking-wide shadow hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
 
   return (
     <div className="space-y-4">
       <button
         className={`${base} bg-indigo-500 text-white`}
-        onClick={() => handleClick("reflect")}
+        onClick={() => onSelectCategory("reflect")}
       >
         Reflect
       </button>
       <button
         className={`${base} bg-teal-500 text-white`}
-        onClick={() => handleClick("center")}
+        onClick={() => onSelectCategory("center")}
       >
         Center
       </button>
       <button
         className={`${base} bg-amber-500 text-white`}
-        onClick={() => handleClick("create")}
+        onClick={() => onSelectCategory("create")}
       >
         Create
       </button>
