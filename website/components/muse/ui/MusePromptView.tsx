@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import ThinkingDots from "./ThinkingDots";
 import useDailyQuota from "../hooks/useDailyQuota";
+import useLastPrompt from "../hooks/useLastPrompt";
 
 interface MusePromptViewProps {
   prompt: string;
@@ -15,12 +16,23 @@ export default function MusePromptView({
   onClose,
 }: MusePromptViewProps) {
   const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
+  const { lastPrompt, savePrompt } = useLastPrompt();
 
+  // Persist prompt when loaded
+  useEffect(() => {
+    if (!isLoading && prompt) {
+      savePrompt(prompt);
+    }
+  }, [isLoading, prompt, savePrompt]);
+
+  // Increment quota once per prompt display
   useEffect(() => {
     if (!isLoading && !isQuotaExceeded) {
       increment();
     }
   }, [isLoading, isQuotaExceeded, increment]);
+
+  const display = isLoading ? null : lastPrompt || prompt;
 
   if (isQuotaExceeded) {
     return (
@@ -54,7 +66,7 @@ export default function MusePromptView({
         {isLoading ? (
           <ThinkingDots />
         ) : (
-          <p className="text-base leading-relaxed">{prompt}</p>
+          <p className="text-base leading-relaxed">{display}</p>
         )}
       </div>
       <p className="text-sm text-gray-500 text-center">
