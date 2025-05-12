@@ -1,5 +1,5 @@
-// file: src/components/muse/ui/MuseModal.tsx
-import React from "react";
+// File: src/components/muse/ui/MuseModal.tsx
+import React, { useEffect } from "react";
 import FocusTrap from "focus-trap-react";
 
 interface MuseModalProps {
@@ -13,16 +13,29 @@ export default function MuseModal({
   onClose,
   children,
 }: MuseModalProps) {
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose} // click outside to close
+    >
       <FocusTrap>
         <div
           role="dialog"
           aria-modal="true"
-          className="relative bg-white rounded-lg shadow-lg p-6 outline-none max-w-lg w-full"
-          tabIndex={-1}
+          className="relative bg-white rounded-lg shadow-xl p-6 max-w-lg w-full"
+          onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
         >
           <button
             onClick={onClose}
