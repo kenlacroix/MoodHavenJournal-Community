@@ -1,7 +1,11 @@
 // File: src/components/muse/ui/MusePromptView.tsx
+"use client";
+
 import React from "react";
 import ThinkingDots from "./ThinkingDots";
 import usePromptRefresh from "../hooks/usePromptRefresh";
+import { useFavorites } from "../hooks/useFavorites";
+import { Star } from "lucide-react";
 
 interface MusePromptViewProps {
   prompt: string;
@@ -21,6 +25,8 @@ export default function MusePromptView({
   onNewPrompt,
 }: MusePromptViewProps) {
   const { count, canRefresh, refresh } = usePromptRefresh(3);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(prompt);
 
   if (isQuotaExceeded) {
     return (
@@ -42,13 +48,27 @@ export default function MusePromptView({
     <div className="p-4 sm:p-6 bg-white rounded-lg shadow-md w-full overflow-auto max-h-full sm:max-h-[80vh]">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl sm:text-2xl font-semibold">Your Prompt</h2>
-        <button
-          onClick={onClose}
-          aria-label="Close Prompt View"
-          className="text-gray-500 hover:text-gray-700 focus:outline-none transition-colors duration-300"
-        >
-          ✕
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => toggleFavorite(prompt)}
+            aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+            className="focus:outline-none"
+          >
+            <Star
+              className={`w-6 h-6 ${
+                favorite ? "text-yellow-400" : "text-gray-400"
+              }`}
+              fill={favorite ? "currentColor" : "none"}
+            />
+          </button>
+          <button
+            onClick={onClose}
+            aria-label="Close Prompt View"
+            className="text-gray-500 hover:text-gray-700 focus:outline-none transition-colors duration-300"
+          >
+            ✕
+          </button>
+        </div>
       </div>
 
       <div className="flex justify-center py-6">

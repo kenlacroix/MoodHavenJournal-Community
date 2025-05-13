@@ -1,10 +1,11 @@
 // File: src/components/muse/ui/MuseMenu.tsx
 "use client";
 
-export type Category = "reflect" | "center" | "create";
+import React from "react";
+
+export type Category = "reflect" | "center" | "create" | "favorites";
 
 interface Props {
-  /** Called when the user selects a category */
   onSelectCategory: (category: Category) => void;
 }
 
@@ -31,6 +32,12 @@ export default function MuseMenu({ onSelectCategory }: Props) {
         onClick={() => onSelectCategory("create")}
       >
         Create
+      </button>
+      <button
+        className={`${base} bg-gray-200 text-gray-800`}
+        onClick={() => onSelectCategory("favorites")}
+      >
+        Favorites
       </button>
     </div>
   );

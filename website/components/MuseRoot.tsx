@@ -6,18 +6,21 @@ import MuseIcon from "@/components/muse/ui/MuseIcon";
 import MuseModal from "@/components/muse/ui/MuseModal";
 import MuseMenu, { Category } from "@/components/muse/ui/MuseMenu";
 import MusePromptView from "@/components/muse/ui/MusePromptView";
+import FavoritesTab from "@/components/muse/FavoritesTab";
 import Toast from "@/components/muse/ui/Toast";
 import useHotkey from "@/components/muse/hooks/useHotkey";
 import useDailyQuota from "@/components/muse/hooks/useDailyQuota";
 import useLastPrompt from "@/components/muse/hooks/useLastPrompt";
 import musePrompts from "@/components/muse/data/musePrompts";
 
+// Only reflect/center/create load actual prompts
+type PromptCategory = Exclude<Category, "favorites">;
+
 export default function MuseRoot({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [view, setView] = useState<"menu" | "prompt">("menu");
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
+  const [view, setView] = useState<"menu" | "prompt" | "favorites">("menu");
+  const [selectedCategory, setSelectedCategory] =
+    useState<PromptCategory | null>(null);
 
   const { lastPrompt, savePrompt } = useLastPrompt();
   const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
@@ -39,7 +42,7 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
     setSelectedCategory(null);
   };
 
-  const loadPrompt = async (category: Category) => {
+  const loadPrompt = async (category: PromptCategory) => {
     setIsLoading(true);
     const list = musePrompts[category];
     const next = list[Math.floor(Math.random() * list.length)];
@@ -54,8 +57,12 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
   };
 
   const handleSelectCategory = (category: Category) => {
-    setSelectedCategory(category);
-    loadPrompt(category).then(() => setView("prompt"));
+    if (category === "favorites") {
+      setView("favorites");
+    } else {
+      setSelectedCategory(category);
+      loadPrompt(category).then(() => setView("prompt"));
+    }
   };
 
   const handleNewPrompt = () => {
@@ -68,9 +75,10 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
       {children}
       <MuseIcon onOpen={openMuse} />
       <MuseModal isOpen={isOpen} onClose={closeMuse}>
-        {view === "menu" ? (
+        {view === "menu" && (
           <MuseMenu onSelectCategory={handleSelectCategory} />
-        ) : (
+        )}
+        {view === "prompt" && (
           <MusePromptView
             prompt={lastPrompt ?? ""}
             isLoading={isLoading}
@@ -80,6 +88,7 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
             onNewPrompt={handleNewPrompt}
           />
         )}
+        {view === "favorites" && <FavoritesTab />}
       </MuseModal>
       {showToast && (
         <Toast
