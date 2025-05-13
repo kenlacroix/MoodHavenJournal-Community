@@ -1,4 +1,6 @@
 // File: src/components/muse/ui/MuseModal.tsx
+"use client";
+
 import React, { useEffect } from "react";
 import FocusTrap from "focus-trap-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,7 +29,7 @@ export default function MuseModal({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
           onClick={onClose}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -38,7 +40,9 @@ export default function MuseModal({
             <motion.div
               role="dialog"
               aria-modal="true"
-              className="relative bg-white rounded-lg shadow-xl p-6 max-w-lg w-full transition-transform"
+              className="relative bg-white w-full max-w-md h-full max-h-full
+                          sm:h-auto sm:max-h-[90vh] rounded-none sm:rounded-lg
+                          p-4 sm:p-6 overflow-auto shadow-xl"
               onClick={(e) => e.stopPropagation()}
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}

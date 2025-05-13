@@ -1,9 +1,6 @@
 // File: src/components/muse/ui/MuseMenu.tsx
 "use client";
 
-/**
- * Category types are defined explicitly to avoid importing the entire prompt bank.
- */
 export type Category = "reflect" | "center" | "create";
 
 interface Props {
@@ -13,7 +10,7 @@ interface Props {
 
 export default function MuseMenu({ onSelectCategory }: Props) {
   const base =
-    "w-full rounded-lg py-3 font-semibold tracking-wide shadow hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+    "w-full sm:text-lg text-base min-h-[3rem] rounded-lg py-4 sm:py-3 font-semibold tracking-wide shadow hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
 
   return (
     <div className="space-y-4">
