@@ -3,16 +3,18 @@
 
 import React from "react";
 
-export type Category = "reflect" | "center" | "create" | "favorites";
-
+export type Category =
+  | "reflect"
+  | "center"
+  | "create"
+  | "favorites"
+  | "history";
 interface Props {
   onSelectCategory: (category: Category) => void;
 }
-
 export default function MuseMenu({ onSelectCategory }: Props) {
   const base =
     "w-full sm:text-lg text-base min-h-[3rem] rounded-lg py-4 sm:py-3 font-semibold tracking-wide shadow hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
-
   return (
     <div className="space-y-4">
       <button
@@ -35,6 +37,12 @@ export default function MuseMenu({ onSelectCategory }: Props) {
       </button>
       <button
         className={`${base} bg-gray-200 text-gray-800`}
+        onClick={() => onSelectCategory("history")}
+      >
+        History
+      </button>
+      <button
+        className={`${base} bg-yellow-400 text-white`}
         onClick={() => onSelectCategory("favorites")}
       >
         Favorites
