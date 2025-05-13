@@ -9,7 +9,7 @@ interface MusePromptViewProps {
   remaining: number;
   isQuotaExceeded: boolean;
   onClose: () => void;
-  onNewPrompt: () => void; // function to fetch a fresh prompt
+  onNewPrompt: () => void;
 }
 
 export default function MusePromptView({
@@ -20,7 +20,6 @@ export default function MusePromptView({
   onClose,
   onNewPrompt,
 }: MusePromptViewProps) {
-  // Limit to 3 additional prompts per category
   const { count, canRefresh, refresh } = usePromptRefresh(3);
 
   if (isQuotaExceeded) {
@@ -31,7 +30,7 @@ export default function MusePromptView({
         </p>
         <button
           onClick={onClose}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none transition duration-300"
         >
           Close
         </button>
@@ -46,7 +45,7 @@ export default function MusePromptView({
         <button
           onClick={onClose}
           aria-label="Close Prompt View"
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="text-gray-500 hover:text-gray-700 focus:outline-none transition-colors duration-300"
         >
           ✕
         </button>
@@ -60,18 +59,21 @@ export default function MusePromptView({
         )}
       </div>
 
-      {/* Refresh button */}
       {!isLoading && canRefresh && (
         <div className="text-center mb-3">
           <button
             onClick={() => {
-              const ok = refresh();
-              if (ok) onNewPrompt();
+              if (refresh()) onNewPrompt();
             }}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none disabled:opacity-50"
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none transition duration-300"
           >
             Give me another
           </button>
+          {count === 2 && (
+            <p className="mt-2 text-sm text-gray-600">
+              Ready to capture your thoughts?
+            </p>
+          )}
         </div>
       )}
 

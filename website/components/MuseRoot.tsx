@@ -6,6 +6,7 @@ import MuseIcon from "@/components/muse/ui/MuseIcon";
 import MuseModal from "@/components/muse/ui/MuseModal";
 import MuseMenu, { Category } from "@/components/muse/ui/MuseMenu";
 import MusePromptView from "@/components/muse/ui/MusePromptView";
+import Toast from "@/components/muse/ui/Toast";
 import useHotkey from "@/components/muse/hooks/useHotkey";
 import useDailyQuota from "@/components/muse/hooks/useDailyQuota";
 import useLastPrompt from "@/components/muse/hooks/useLastPrompt";
@@ -21,6 +22,8 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
   const { lastPrompt, savePrompt } = useLastPrompt();
   const { remaining, isQuotaExceeded, increment } = useDailyQuota(5);
   const [isLoading, setIsLoading] = useState(false);
+  const [firstPromptShown, setFirstPromptShown] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useHotkey({ toggleMuse: () => setIsOpen((o) => !o) });
 
@@ -43,6 +46,11 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
     savePrompt(next);
     increment();
     setIsLoading(false);
+
+    if (!firstPromptShown) {
+      setFirstPromptShown(true);
+      setShowToast(true);
+    }
   };
 
   const handleSelectCategory = (category: Category) => {
@@ -73,6 +81,12 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
           />
         )}
       </MuseModal>
+      {showToast && (
+        <Toast
+          message="Ready to capture your thoughts?"
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </>
   );
 }
