@@ -1,4 +1,4 @@
-// file: src/components/muse/data/musePrompts.ts
+// File: src/components/muse/data/musePrompts.ts
 // Example prompt banks. Adjust categories and entries as desired.
 const musePrompts = {
   reflect: [

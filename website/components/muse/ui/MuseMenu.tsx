@@ -1,9 +1,10 @@
 // File: src/components/muse/ui/MuseMenu.tsx
 "use client";
 
-import musePrompts from "../data/musePrompts";
-
-export type Category = keyof typeof musePrompts;
+/**
+ * Category types are defined explicitly to avoid importing the entire prompt bank.
+ */
+export type Category = "reflect" | "center" | "create";
 
 interface Props {
   /** Called when the user selects a category */
