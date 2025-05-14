@@ -1,31 +1,37 @@
 // File: src/components/muse/hooks/useFavorites.ts
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const STORAGE_KEY = "muse_favorites";
 
-/**
- * Hook to manage favorite prompts in localStorage
- */
 export function useFavorites(): {
   favorites: string[];
   toggleFavorite: (prompt: string) => void;
   isFavorite: (prompt: string) => boolean;
 } {
-  const [favorites, setFavorites] = useState<string[]>([]);
-
-  useEffect(() => {
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    // Initialize from localStorage on mount
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) setFavorites(JSON.parse(stored));
+      return stored ? JSON.parse(stored) : [];
     } catch {
-      setFavorites([]);
+      return [];
     }
-  }, []);
+  });
 
+  // Skip first render write
+  const isFirstUpdate = useRef(true);
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+    if (isFirstUpdate.current) {
+      isFirstUpdate.current = false;
+      return;
+    }
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+    } catch (e) {
+      console.error("[useFavorites] error writing favorites:", e);
+    }
   }, [favorites]);
 
   function toggleFavorite(prompt: string) {
