@@ -15,6 +15,7 @@ import useLastPrompt from "@/components/muse/hooks/useLastPrompt";
 import musePrompts from "@/components/muse/data/musePrompts";
 import { useHistory } from "@/components/muse/hooks/useHistory";
 
+// Only reflect/center/create/spring/... load actual prompts
 type PromptCategory = Exclude<Category, "favorites" | "history">;
 
 export default function MuseRoot({ children }: { children: React.ReactNode }) {
@@ -59,11 +60,13 @@ export default function MuseRoot({ children }: { children: React.ReactNode }) {
   };
 
   const handleSelectCategory = (category: Category) => {
-    if (category === "favorites") setView("favorites");
-    else if (category === "history") setView("history");
-    else {
-      setSelectedCategory(category);
-      loadPrompt(category).then(() => setView("prompt"));
+    if (category === "favorites") {
+      setView("favorites");
+    } else if (category === "history") {
+      setView("history");
+    } else {
+      setSelectedCategory(category as PromptCategory);
+      loadPrompt(category as PromptCategory).then(() => setView("prompt"));
     }
   };
 
